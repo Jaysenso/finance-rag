@@ -1,0 +1,20 @@
+# Chunking Configuration
+chunking:
+  chunk_size: 1024 # Target chunk size in tokens
+  chunk_overlap: 128 # Overlap between chunks
+  min_chunk_size: 256 # Minimum chunk size
+  max_chunk_size: 2048 # Maximum chunk size
+
+# Embedding Configuration
+embedding:
+  provider: "sentence-transformers"
+  model: "all-mpnet-base-v2"
+  batch_size: 32
+  dimension: 768
+
+# LLM Configuration
+llm:
+  provider: "openrouter" # claude, openai, ollama
+  model: "google/gemma-3-4b-it:free"
+  max_tokens: 4096
+  temperature: 0.0 # Deterministic for financial data
