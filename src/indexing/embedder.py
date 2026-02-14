@@ -12,6 +12,8 @@ from abc import ABC, abstractmethod
 from typing import List
 from pathlib import Path
 
+import torch
+
 config = load_config()
 embedding_config = config["embedding"]
 logger = get_logger(__name__)
@@ -72,7 +74,12 @@ class SentenceTransformerEmbedder(BaseEmbedder):
         self.model_name = embedding_config["model"] or model_name
         logger.info(f"Loading sentence transformer model: {self.model_name}")
 
-        self.model = SentenceTransformer(model_name)
+        if torch.cuda.is_available():
+            device = "cuda"
+        else:
+            device = "cpu"
+        
+        self.model = SentenceTransformer(model_name,device=device)
 
         logger.info(f"Model loaded. Dimension: {self.dimension}")
 

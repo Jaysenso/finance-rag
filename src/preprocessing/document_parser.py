@@ -6,8 +6,10 @@ from pathlib import Path
 from PIL import Image
 from typing import List, Dict, Any, Optional
 from dataclasses import dataclass, field
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from docling.document_converter import DocumentConverter, PdfFormatOption
+from docling.datamodel.accelerator_options import AcceleratorDevice, AcceleratorOptions
 from docling.datamodel.base_models import InputFormat
 from docling.datamodel.pipeline_options import PdfPipelineOptions
 from docling_core.types.doc import PictureItem, TableItem
@@ -19,7 +21,7 @@ logger = get_logger(__name__)
 class DocumentElement:
     """Represents a single element from a document."""
     element_id: str
-    type: str  # e.g., "Title", "NarrativeText", "Table", "Image"
+    type: str  
     text: str
     page_number: Optional[int] = None
     metadata: Dict[str, Any] = field(default_factory=dict)
@@ -39,11 +41,24 @@ class DocumentParser:
     def __init__(
         self, 
         model: Optional[str] = None,
+        use_vision: bool = True,
+        max_vision_workers: int = 4,
     ):
-        """Initialize document parser."""
+        """Initialize document parser.
+        
+        Args:
+            model: Vision model to use for image/table processing
+            use_vision: Whether to use vision model for tables/images (default: True)
+            max_vision_workers: Max parallel workers for vision processing (default: 4)
+        """
 
         # Configure Docling pipeline options
+        accelerator_options = AcceleratorOptions(
+            device=AcceleratorDevice.CUDA
+        )
+        
         pipeline_options = PdfPipelineOptions()
+        pipeline_options.accelerator_options = accelerator_options
         pipeline_options.do_table_structure = True
         pipeline_options.generate_picture_images = True
         pipeline_options.generate_table_images = True
@@ -55,10 +70,16 @@ class DocumentParser:
                 InputFormat.PDF: PdfFormatOption(pipeline_options=pipeline_options),
             },
         )
+        
         # Setup vision model for images understanding
-        self.vision_client =  load_vision_model(model)
+        self.use_vision = use_vision
+        self.max_vision_workers = max_vision_workers
+        self.vision_client = load_vision_model(model) if use_vision else None
 
-        logger.info(f"Document parser initialized (vision: {model})")
+        logger.info(
+            f"Document parser initialized (vision: {model if use_vision else 'disabled'}, "
+            f"workers: {max_vision_workers})"
+        )
 
     def _describe_with_vision(self, image: Image.Image, prompt: str) -> str:
         """
@@ -76,130 +97,202 @@ class DocumentParser:
         
         return self.vision_client.describe_image(image, prompt)
 
+    def _process_vision_items(
+        self, 
+        vision_tasks: List[tuple[int, Any, Image.Image, str]]
+    ) -> Dict[int, str]:
+        """
+        Process multiple vision tasks in parallel.
+        
+        Args:
+            vision_tasks: List of (index, item, image, prompt) tuples
+            
+        Returns:
+            Dictionary mapping index to vision description
+        """
+        results = {}
+        
+        if not vision_tasks or not self.vision_client:
+            return results
+        
+        def process_single_vision(task):
+            idx, item, image, prompt = task
+            try:
+                description = self._describe_with_vision(image, prompt)
+                return idx, description
+            except Exception as e:
+                logger.warning(f"Vision processing failed for item {idx}: {e}")
+                return idx, None
+        
+        # Process vision tasks in parallel
+        with ThreadPoolExecutor(max_workers=self.max_vision_workers) as executor:
+            futures = {executor.submit(process_single_vision, task): task for task in vision_tasks}
+            
+            for future in as_completed(futures):
+                idx, description = future.result()
+                if description:
+                    results[idx] = description
+        
+        return results
 
-    def parse_document(
+    def parse_documents_batch(
         self,
-        file_path: str | Path,
-        strategy: str = "auto",
+        file_paths: List[str | Path],
         use_vision_for_tables: bool = True,
         **kwargs,
-    ) -> ParsedDocument:
-        file_path = Path(file_path)
-
-        if not file_path.exists():
-            raise FileNotFoundError(f"Document not found: {file_path}")
-
-        logger.info(f"Parsing document: {file_path.name} (strategy: {strategy})")
-
+    ) -> List[ParsedDocument]:
+        """
+        Parse multiple documents in batch for improved performance.
+        
+        Args:
+            file_paths: List of file paths to parse
+            strategy: Parsing strategy (default: "auto")
+            use_vision_for_tables: Whether to use vision for table refinement
+            
+        Returns:
+            List of ParsedDocument objects
+        """
+        file_paths = [Path(fp) for fp in file_paths]
+        
+        # Validate all files exist
+        for fp in file_paths:
+            if not fp.exists():
+                raise FileNotFoundError(f"Document not found: {fp}")
+        
+        logger.info(f"Batch parsing {len(file_paths)} documents")
+        
         try:
-            # Convert document with Docling
-            result = self.converter.convert(str(file_path))
-            doc = result.document
-
-            # Iterate items and build DocumentElement list
-            doc_elements = []
-            for idx, (item, level) in enumerate(doc.iterate_items()):
-                # Extract page number from provenance
-                page_number = None
-                if hasattr(item, 'prov') and item.prov:
-                    page_refs = [p.page_no for p in item.prov if hasattr(p, 'page_no')]
-                    page_number = page_refs[0] if page_refs else None
-
-                if isinstance(item, TableItem):
-                    table_md = item.export_to_markdown(doc)
-
-                    # Optionally use vision model to refine the table markdown
-                    if use_vision_for_tables and self.vision_client:
-                        try:
-                            table_image = item.get_image(doc)
-                            if table_image:
-                                table_md = self._describe_with_vision(
-                                    table_image,
-                                    "Below is a markdown table extracted via OCR from a "
-                                    "financial document. Compare it against the table image "
-                                    "and correct any OCR errors, missing values, or "
-                                    "formatting issues. Return ONLY the corrected markdown "
-                                    "table, nothing else.\n\n"
-                                    f"{table_md}",
-                                )
-                                print(table_md)
-                        except Exception as e:
-                            logger.warning(f"Vision refinement failed for table, using raw markdown: {e}")
-                   
-                    doc_elements.append(DocumentElement(
-                        element_id=f"elem_{idx}",
-                        type="Table",
-                        text=table_md,
-                        page_number=page_number,
-                    ))
-
-                elif isinstance(item, PictureItem):
-                    # Use vision model to describe the image
-                    image_description = None
-                    try:
-                        picture_image = item.get_image(doc)
-                        if picture_image and self.vision_client:
-                            image_description = self._describe_with_vision(
-                                picture_image,
-                                "Describe this image from a financial document. "
-                                "What does it show? Include key details and data.",
-                            )
-                    except Exception as e:
-                        logger.warning(f"Could not get vision description for image: {e}")
-
-                    doc_elements.append(DocumentElement(
-                        element_id=f"elem_{idx}",
-                        type="Image",
-                        text=image_description or "[Image]",
-                        page_number=page_number,
-                        metadata={},
-                        image_description=image_description,
-                    ))
-
-                else:
-                    # Text element - map Docling label to our type
-                    text = item.text if hasattr(item, 'text') else str(item)
-                    label = getattr(item, 'label', None)
-                    label_str = label.value if hasattr(label, 'value') else str(label).lower()
-
-                    if label_str in ('title', 'section_header'):
-                        elem_type = "Title"
-                    elif label_str == 'list_item':
-                        elem_type = "ListItem"
+            # Batch convert all documents with Docling
+            results = self.converter.convert_all([str(fp) for fp in file_paths])
+            
+            # Collect all vision tasks across all documents
+            all_vision_tasks = []
+            all_items_data = []
+            
+            for doc_idx, (result, file_path) in enumerate(zip(results, file_paths)):
+                doc = result.document
+                items_data = []
+                
+                for idx, (item, level) in enumerate(doc.iterate_items()):
+                    # Extract page number from provenance
+                    page_number = None
+                    if hasattr(item, 'prov') and item.prov:
+                        page_refs = [p.page_no for p in item.prov if hasattr(p, 'page_no')]
+                        page_number = page_refs[0] if page_refs else None
+                    
+                    items_data.append((idx, item, level, page_number))
+                    
+                    # Collect vision tasks for parallel processing
+                    if self.use_vision and self.vision_client:
+                        if isinstance(item, TableItem) and use_vision_for_tables:
+                            try:
+                                table_image = item.get_image(doc)
+                                table_md = item.export_to_markdown(doc)
+                                if table_image:
+                                    prompt = (
+                                        "Below is a markdown table extracted via OCR from a "
+                                        "financial document. Compare it against the table image "
+                                        "and correct any OCR errors, missing values, or "
+                                        "formatting issues. Return ONLY the corrected markdown "
+                                        f"table, nothing else.\n\n{table_md}"
+                                    )
+                                    # Use (doc_idx, idx) as composite key
+                                    all_vision_tasks.append(((doc_idx, idx), item, table_image, prompt))
+                            except Exception as e:
+                                logger.warning(f"Could not prepare table vision task: {e}")
+                        
+                        elif isinstance(item, PictureItem):
+                            try:
+                                picture_image = item.get_image(doc)
+                                if picture_image:
+                                    prompt = (
+                                        "Describe this image from a financial document. "
+                                        "What does it show? Include key details and data."
+                                    )
+                                    all_vision_tasks.append(((doc_idx, idx), item, picture_image, prompt))
+                            except Exception as e:
+                                logger.warning(f"Could not prepare image vision task: {e}")
+                
+                all_items_data.append((doc, items_data, file_path))
+            
+            # Process all vision tasks in parallel across all documents
+            vision_results = self._process_vision_items(all_vision_tasks)
+            
+            # Build ParsedDocument objects
+            parsed_docs = []
+            for doc_idx, (doc, items_data, file_path) in enumerate(all_items_data):
+                doc_elements = []
+                
+                for idx, item, level, page_number in items_data:
+                    composite_key = (doc_idx, idx)
+                    
+                    if isinstance(item, TableItem):
+                        table_md = vision_results.get(composite_key) or item.export_to_markdown(doc)
+                        
+                        doc_elements.append(DocumentElement(
+                            element_id=f"elem_{idx}",
+                            type="Table",
+                            text=table_md,
+                            page_number=page_number,
+                        ))
+                    
+                    elif isinstance(item, PictureItem):
+                        image_description = vision_results.get(composite_key)
+                        
+                        doc_elements.append(DocumentElement(
+                            element_id=f"elem_{idx}",
+                            type="Image",
+                            text=image_description or "[Image]",
+                            page_number=page_number,
+                            metadata={},
+                            image_description=image_description,
+                        ))
+                    
                     else:
-                        elem_type = "NarrativeText"
-
-                    doc_elements.append(DocumentElement(
-                        element_id=f"elem_{idx}",
-                        type=elem_type,
-                        text=text,
-                        page_number=page_number,
-                        metadata={},
-                    ))
-
-            metadata = {
-                "file_name": file_path.name,
-                "file_type": file_path.suffix,
-                "num_elements": len(doc_elements),
-                "num_tables": len([e for e in doc_elements if e.type == "Table"]),
-                "num_images": len([e for e in doc_elements if e.type == "Image"]),
-            }
-
-            parsed_doc = ParsedDocument(
-                file_path=file_path,
-                elements=doc_elements,
-                metadata=metadata,
-            )
-
-            logger.info(
-                f"Parsed {len(doc_elements)} elements "
-                f"({metadata['num_tables']} tables, {metadata['num_images']} images)"
-            )
-
-            return parsed_doc
-
+                        # Text element
+                        text = item.text if hasattr(item, 'text') else str(item)
+                        label = getattr(item, 'label', None)
+                        label_str = label.value if hasattr(label, 'value') else str(label).lower()
+                        
+                        if label_str in ('title', 'section_header'):
+                            elem_type = "Title"
+                        elif label_str == 'list_item':
+                            elem_type = "ListItem"
+                        else:
+                            elem_type = "NarrativeText"
+                        
+                        doc_elements.append(DocumentElement(
+                            element_id=f"elem_{idx}",
+                            type=elem_type,
+                            text=text,
+                            page_number=page_number,
+                            metadata={},
+                        ))
+                
+                metadata = {
+                    "file_name": file_path.name,
+                    "file_type": file_path.suffix,
+                    "num_elements": len(doc_elements),
+                    "num_tables": len([e for e in doc_elements if e.type == "Table"]),
+                    "num_images": len([e for e in doc_elements if e.type == "Image"]),
+                }
+                
+                parsed_docs.append(ParsedDocument(
+                    file_path=file_path,
+                    elements=doc_elements,
+                    metadata=metadata,
+                ))
+                
+                logger.info(
+                    f"Parsed {file_path.name}: {len(doc_elements)} elements "
+                    f"({metadata['num_tables']} tables, {metadata['num_images']} images)"
+                )
+            
+            logger.info(f"Batch parsing complete: {len(parsed_docs)} documents processed")
+            return parsed_docs
+        
         except Exception as e:
-            logger.error(f"Error parsing document {file_path}: {e}")
+            logger.error(f"Error in batch parsing: {e}")
             raise
 
 if __name__ == "__main__":

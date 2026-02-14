@@ -2,6 +2,7 @@ from config import load_config
 from src.utils.logger import get_logger
 from src.preprocessing.document_parser import DocumentParser, DocumentElement
 
+import re
 import uuid
 from pathlib import Path
 from typing import List, Dict, Any, Optional
@@ -9,6 +10,7 @@ from dataclasses import dataclass, field
 
 config = load_config()
 chunking_config = config["chunking"]
+parsing_config = config.get("document_parsing", {})
 logger = get_logger(__name__)
 
 
@@ -61,7 +63,11 @@ class SemanticChunker:
         self.min_chunk_size = min_chunk_size or chunking_config["min_chunk_size"]
         self.max_chunk_size = max_chunk_size or chunking_config["max_chunk_size"]
 
-        self.parser = DocumentParser()
+        # Initialize parser with config
+        self.parser = DocumentParser(
+            use_vision=parsing_config.get("use_vision", True),
+            max_vision_workers=parsing_config.get("max_vision_workers", 4),
+        )
 
         logger.info(
             f"Semantic chunker initialized: "
@@ -86,15 +92,28 @@ class SemanticChunker:
         """
         logger.info(f"Chunking document: {Path(file_path).name}")
 
-        parsed_doc = self.parser.parse_document(file_path)
+        # Use batch parsing even for single document
+        parsed_docs = self.parser.parse_documents_batch([file_path])
+        parsed_doc = parsed_docs[0] if parsed_docs else None
+        
+        if not parsed_doc:
+            logger.error(f"Failed to parse document: {file_path}")
+            return []
+        
         parent_doc_id = str(uuid.uuid4())
 
         chunks: List[Chunk] = []
         text_buffer: List[DocumentElement] = []
         chunk_index = 0
 
-        for element in parsed_doc.elements:
+        elements = parsed_doc.elements
+        for idx, element in enumerate(elements):
             if element.type in ("Table", "Image"):
+                # Grab surrounding text as context (caption before or after)
+                before = text_buffer[-1].text.strip() if text_buffer else ""
+                after_el = elements[idx + 1] if idx + 1 < len(elements) else None
+                after = after_el.text.strip() if after_el and after_el.type not in ("Table", "Image") else ""
+
                 # Flush any accumulated text first
                 if text_buffer:
                     text_chunks = self._chunk_text_elements(
@@ -105,10 +124,12 @@ class SemanticChunker:
                     chunk_index += len(text_chunks)
                     text_buffer = []
 
-                # Table/Image gets its own chunk
+                # Table/Image gets its own chunk, with surrounding context
+                parts = [p for p in [before, element.text, after] if p]
+                content = "\n\n".join(parts)
                 chunks.append(Chunk(
                     chunk_id=str(uuid.uuid4()),
-                    content=element.text,
+                    content=content,
                     company=company,
                     document_type=document_type,
                     filing_date=filing_date,
@@ -117,7 +138,7 @@ class SemanticChunker:
                     parent_doc_id=parent_doc_id,
                     has_table=element.type == "Table",
                     has_chart=element.type == "Image",
-                    token_count=self._estimate_tokens(element.text),
+                    token_count=self._estimate_tokens(content),
                     metadata=element.metadata,
                 ))
                 chunk_index += 1
@@ -229,6 +250,88 @@ class SemanticChunker:
                 i = rewind if rewind > start_i else i
 
         return chunks
+
+    def chunk_documents_batch(
+        self,
+        file_metadata: List[Dict[str, str]],
+    ) -> List[Chunk]:
+        """
+        Chunk multiple documents in batch for improved performance.
+        
+        Args:
+            file_metadata: List of dicts with keys: file_path, company, document_type, filing_date
+            
+        Returns:
+            Flattened list of chunks from all documents
+        """
+        file_paths = [fm["file_path"] for fm in file_metadata]
+        logger.info(f"Batch chunking {len(file_paths)} documents")
+        
+        # Parse all documents in batch
+        parsed_docs = self.parser.parse_documents_batch(file_paths)
+        
+        # Chunk each parsed document
+        all_chunks = []
+        for parsed_doc, metadata in zip(parsed_docs, file_metadata):
+            parent_doc_id = str(uuid.uuid4())
+            chunks: List[Chunk] = []
+            text_buffer: List[DocumentElement] = []
+            chunk_index = 0
+            
+            elements = parsed_doc.elements
+            for idx, element in enumerate(elements):
+                if element.type in ("Table", "Image"):
+                    # Grab surrounding text as context
+                    before = text_buffer[-1].text.strip() if text_buffer else ""
+                    after_el = elements[idx + 1] if idx + 1 < len(elements) else None
+                    after = after_el.text.strip() if after_el and after_el.type not in ("Table", "Image") else ""
+                    
+                    # Flush any accumulated text first
+                    if text_buffer:
+                        text_chunks = self._chunk_text_elements(
+                            text_buffer, metadata["company"], metadata["document_type"],
+                            metadata["filing_date"], parent_doc_id, chunk_index,
+                        )
+                        chunks.extend(text_chunks)
+                        chunk_index += len(text_chunks)
+                        text_buffer = []
+                    
+                    # Table/Image gets its own chunk
+                    parts = [p for p in [before, element.text, after] if p]
+                    content = "\n\n".join(parts)
+                    chunks.append(Chunk(
+                        chunk_id=str(uuid.uuid4()),
+                        content=content,
+                        company=metadata["company"],
+                        document_type=metadata["document_type"],
+                        filing_date=metadata["filing_date"],
+                        page_number=element.page_number,
+                        chunk_index=chunk_index,
+                        parent_doc_id=parent_doc_id,
+                        has_table=element.type == "Table",
+                        has_chart=element.type == "Image",
+                        token_count=self._estimate_tokens(content),
+                        metadata=element.metadata,
+                    ))
+                    chunk_index += 1
+                else:
+                    text_buffer.append(element)
+            
+            # Flush remaining text
+            if text_buffer:
+                text_chunks = self._chunk_text_elements(
+                    text_buffer, metadata["company"], metadata["document_type"],
+                    metadata["filing_date"], parent_doc_id, chunk_index,
+                )
+                chunks.extend(text_chunks)
+            
+            all_chunks.extend(chunks)
+            logger.info(f"Created {len(chunks)} chunks from {Path(metadata['file_path']).name}")
+        
+        logger.info(f"Batch chunking complete: {len(all_chunks)} total chunks from {len(file_paths)} documents")
+        return all_chunks
+
+
 
 if __name__ == "__main__":
 

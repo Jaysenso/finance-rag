@@ -5,7 +5,7 @@ Supports multiple models provider.
 import os
 import base64
 from src.utils.logger import get_logger
-from config import llm_config
+from config import load_config
 from abc import ABC, abstractmethod
 from PIL import Image
 from typing import Optional
@@ -43,7 +43,8 @@ class OpenRouterVision(VisionModel):
     def __init__(
         self,
         model: Optional[str] = None, 
-        api_key: Optional[str] = None):
+        api_key: Optional[str] = None,
+        config_key: str = "vision_llm"):
         """
         Initialize OpenRouter vision model.
         """
@@ -62,9 +63,13 @@ class OpenRouterVision(VisionModel):
             base_url="https://openrouter.ai/api/v1",
             api_key=self.api_key,
         )
-        self.model = llm_config["model"] or model
         
-        logger.info(f"Initialized OpenRouter vision model: {self.model}")
+        # Load from specified config section
+        config = load_config()
+        vision_config = config[config_key]
+        self.model = model or vision_config["model"]
+        
+        logger.info(f"Initialized OpenRouter vision model: {self.model} (from {config_key})")
 
     def describe_image(self, image: Image.Image, prompt: str) -> str:
         """
@@ -110,17 +115,19 @@ class OpenRouterVision(VisionModel):
             raise
 
 def load_vision_model(
-    model: str = "nvidia/nemotron-nano-12b-v2-vl:free",
-    api_key: Optional[str] = None
+    model: Optional[str] = None,
+    api_key: Optional[str] = None,
+    config_key: str = "vision_llm"
 ) -> VisionModel:
     """
     Factory function to load vision model.
     
     Args:
-        model: Model name on OpenRouter
+        model: Model name on OpenRouter (optional, loads from config if not provided)
         api_key: OpenRouter API key (optional, reads from OPENROUTER_API_KEY env var)
+        config_key: Config section to load from (default: "vision_llm")
         
     Returns:
         VisionModel instance
     """
-    return OpenRouterVision(model=model, api_key=api_key)
+    return OpenRouterVision(model=model, api_key=api_key, config_key=config_key)
