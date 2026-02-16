@@ -32,7 +32,6 @@ A specialized Retrieval-Augmented Generation (RAG) system for financial document
     ```bash
     OPENAI_API_KEY=your_key_here
     QDRANT_API_KEY=your_key_here
-    QDRANT_URL=your_url_here
     SEC_API_KEY=your_sec_api_key_here  # For data collection
     ```
 
