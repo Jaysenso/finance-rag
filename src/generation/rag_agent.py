@@ -4,10 +4,11 @@ Agentic RAG orchestrator using LangGraph.
 Pipeline: Analyze → Retrieve → Rerank → Verify → (Retry?) → Generate
 Each step is a graph node. Self-correction is a conditional edge
 """
-from dataclasses import dataclass, field
 from typing import List, Optional, TypedDict
 
 from langgraph.graph import StateGraph, START, END
+
+from src.generation.models import SubQuery, QueryAnalysis, Source, RAGResponse
 
 from src.utils.logger import get_logger
 from src.utils.pipeline_logger import (
@@ -18,7 +19,7 @@ from src.utils.pipeline_logger import (
 )
 from src.generation.llm import BaseLLM, get_llm
 from src.generation.reranker import BaseReranker, get_reranker
-from src.generation.prompts import (
+from src.utils.prompts import (
     QUERY_ANALYSIS_SYSTEM, QUERY_ANALYSIS_USER,
     VERIFICATION_SYSTEM, VERIFICATION_USER,
     REFORMULATION_SYSTEM, REFORMULATION_USER,
@@ -28,65 +29,13 @@ from src.generation.prompts import (
 )
 from src.indexing.embedder import BaseEmbedder, get_embedder
 from src.indexing.vector_store import QdrantVectorStore, SearchResult, get_vector_store
+from src.generation.hybrid_retriever import HybridRetriever, get_hybrid_retriever
 from config import load_config
 
 config = load_config()
 retrieval_config = config["retrieval"]
+hype_config = config.get("hype", {})
 logger = get_logger(__name__)
-
-
-# ── Dataclasses ──────────────────────────────────────────────
-
-@dataclass
-class SubQuery:
-    """A decomposed sub-query with retrieval parameters and results."""
-    query: str
-    company: Optional[str] = None
-    document_type: Optional[str] = None
-    time_hint: Optional[str] = None
-    results: List[SearchResult] = field(default_factory=list)
-    verification_score: float = 0.0
-    verified: bool = False
-    verification_reason: str = ""
-    verification_missing: str = ""
-    retry_count: int = 0
-    original_query: str = ""
-    reformulation_history: List[str] = field(default_factory=list)
-
-
-@dataclass
-class QueryAnalysis:
-    """Structured output from query analysis step."""
-    intent: str
-    companies: List[str]
-    document_types: List[str]
-    time_periods: List[str]
-    needs_table: bool
-    sub_queries: List[SubQuery]
-    raw_query: str
-
-
-@dataclass
-class Source:
-    """A cited source in the final answer."""
-    source_number: int
-    company: str
-    document_type: str
-    filing_date: str
-    page_number: Optional[int]
-    chunk_id: str
-    score: float
-
-
-@dataclass
-class RAGResponse:
-    """Final response from the RAG agent."""
-    answer: str
-    sources: List[Source]
-    sub_queries: List[SubQuery]
-    query_analysis: QueryAnalysis
-    total_chunks_retrieved: int
-    total_retries: int
 
 
 # ── Graph State ──────────────────────────────────────────────
@@ -129,13 +78,16 @@ class RAGAgent:
         embedder: BaseEmbedder = None,
         reranker: BaseReranker = None,
         vector_store: QdrantVectorStore = None,
+        hybrid_retriever: HybridRetriever = None,
         max_retries: int = None,
         retrieval_limit: int = None,
         verification_threshold: float = None,
         score_threshold: float = None,
+        verbose: bool = False,
     ):
         # LLM for analysis/verification/reformulation
         self.llm = llm or get_llm()
+        self.verbose = verbose
         
         # LLM for final answer generation (supports tool calling)
         self.generation_llm = generation_llm or get_llm(config_key="generation_llm")
@@ -147,13 +99,23 @@ class RAGAgent:
         self.retrieval_limit = retrieval_limit or retrieval_config["retrieval_limit"]
         self.verification_threshold = verification_threshold or retrieval_config["verification_threshold"]
         self.score_threshold = score_threshold or retrieval_config["score_threshold"]
+        
+        # HyPE hybrid retriever (optional)
+        self.use_hype = hype_config.get("enabled", False)
+        if self.use_hype:
+            self.hybrid_retriever = hybrid_retriever or get_hybrid_retriever()
+            logger.info("HyPE dual-database retrieval enabled")
+        else:
+            self.hybrid_retriever = None
 
         self.graph = self._build_graph()
 
-        logger.info(
-            f"RAGAgent initialized (retries={self.max_retries}, "
-            f"limit={self.retrieval_limit}, threshold={self.verification_threshold})"
-        )
+        if self.verbose:
+            logger.info(
+                f"RAGAgent initialized (retries={self.max_retries}, "
+                f"limit={self.retrieval_limit}, threshold={self.verification_threshold}, "
+                f"hype={self.use_hype})"
+            )
 
     # ── Graph Construction ───────────────────────────────────
 
@@ -188,7 +150,7 @@ class RAGAgent:
 
         return graph.compile()
 
-    # ── Public API ───────────────────────────────────────────
+    # ── Nodes Definition ───────────────────────────────────────────
 
     # Pipeline logging methods moved to src/utils/pipeline_logger.py
 
@@ -204,9 +166,14 @@ class RAGAgent:
         """
         logger.info(f"Processing query: {user_query}")
 
-        # Setup pipeline logger
+        # Setup pipeline logger (ALWAYS active)
         log_path, log_file = setup_pipeline_logger()
-        logger.info(f"Pipeline log: {log_path}")
+        # Only show log path if verbose, or maybe always? User asked for "basic prompt". 
+        # "Processing query" is basic. "Log file created at..." might be useful but "basic".
+        # Let's keep it simple: detailed logs show path.
+        if self.verbose:
+            logger.info(f"Pipeline log: {log_path}")
+        
         log_pipeline_header(log_file, user_query)
 
         initial_state: RAGState = {
@@ -234,7 +201,11 @@ class RAGAgent:
                 partial_state = chunk[node_name]
                 # Accumulate state updates
                 full_state.update(partial_state)
+                
+                # ALWAYS log state to file
                 log_state(node_name, full_state, log_file)
+                
+                    
         finally:
             log_pipeline_footer(log_file)
             log_file.close()
@@ -254,8 +225,11 @@ class RAGAgent:
         """Decompose user query into sub-queries with filters."""
         user_query = state["user_query"]
 
+        available_companies = self.vector_store.get_available_companies()
+        available_companies_str = ", ".join(available_companies)
+
         messages = [
-            {"role": "system", "content": QUERY_ANALYSIS_SYSTEM},
+            {"role": "system", "content": QUERY_ANALYSIS_SYSTEM.format(companies_str=available_companies_str)},
             {"role": "user", "content": QUERY_ANALYSIS_USER.format(query=user_query)},
         ]
 
@@ -274,11 +248,12 @@ class RAGAgent:
             analysis = self._parse_analysis(parsed, user_query)
 
         first_sq = analysis.sub_queries[0]
-        logger.info(
-            f"Query analysis: intent={analysis.intent}, "
-            f"companies={analysis.companies}, "
-            f"sub_queries={len(analysis.sub_queries)}"
-        )
+        if self.verbose:
+            logger.info(
+                f"Query analysis: intent={analysis.intent}, "
+                f"companies={analysis.companies}, "
+                f"sub_queries={len(analysis.sub_queries)}"
+            )
 
         return {
             "query_analysis": analysis,
@@ -334,21 +309,35 @@ class RAGAgent:
     # ── Node: Retrieve ───────────────────────────────────────
 
     def _node_retrieve(self, state: RAGState) -> dict:
-        """Embed query and search vector store with current filters."""
+        """Retrieve using hybrid or standard search."""
         current_sq = state["sub_queries"][state["current_sq_idx"]]
-        query_embedding = self.embedder.embed(current_sq.query)
-        results = self.vector_store.search(
-            query_embedding=query_embedding,
-            limit=state["current_limit"],
-            company=state["current_company"],
-            document_type=state["current_doc_type"],
-            score_threshold=self.score_threshold,
-        )
+        
+        # Use HyPE hybrid retrieval if enabled
+        if self.use_hype and self.hybrid_retriever:
+            logger.info(f"Using HyPE hybrid retrieval for: {current_sq.query}")
+            results = self.hybrid_retriever.retrieve(
+                query=current_sq.query,
+                limit=state["current_limit"],
+                company=state["current_company"],
+                document_type=state["current_doc_type"],
+                score_threshold=self.score_threshold,
+            )
+        else:
+            # Standard content-only retrieval
+            query_embedding = self.embedder.embed(current_sq.query)
+            results = self.vector_store.search(
+                query_embedding=query_embedding,
+                limit=state["current_limit"],
+                company=state["current_company"],
+                document_type=state["current_doc_type"],
+                score_threshold=self.score_threshold,
+            )
 
-        logger.info(
-            f"Retrieved {len(results)} chunks for: {current_sq.query} "
-            f"(company={state['current_company']}, doc_type={state['current_doc_type']})"
-        )
+        if self.verbose:
+            logger.info(
+                f"Retrieved {len(results)} chunks for: {current_sq.query} "
+                f"(company={state['current_company']}, doc_type={state['current_doc_type']})"
+            )
         return {"current_results": results}
 
     # ── Node: Rerank ─────────────────────────────────────────
@@ -398,12 +387,13 @@ class RAGAgent:
 
         score = float(parsed["score"])
         is_relevant = score >= self.verification_threshold
-        logger.info(
-            f"Verification: score={score:.2f}, relevant={is_relevant}, "
-            f"reason={parsed.get('reason', 'N/A')}"
-        )
+        if self.verbose:
+            logger.info(
+                f"Verification: score={score:.2f}, relevant={is_relevant}, "
+                f"reason={parsed.get('reason', 'N/A')}"
+            )
 
-        # Update sub-query via state return (consistent with other nodes)
+        # Update sub-query via state return
         sub_queries = list(state["sub_queries"])
         idx = state["current_sq_idx"]
         sub_queries[idx].verification_score = score
@@ -423,6 +413,8 @@ class RAGAgent:
             {"role": "system", "content": REFORMULATION_SYSTEM},
             {"role": "user", "content": REFORMULATION_USER.format(
                 query=sq.query,
+                original_query=sq.original_query or sq.query,
+                history=", ".join(sq.reformulation_history) if sq.reformulation_history else "None",
                 reason=sq.verification_reason,
                 missing=sq.verification_missing,
             )},
@@ -557,7 +549,8 @@ class RAGAgent:
             for i, r in enumerate(unique_results)
         ]
 
-        logger.info(f"Generated answer: {len(answer)} chars, {len(sources)} sources")
+        if self.verbose:
+            logger.info(f"Generated answer: {len(answer)} chars, {len(sources)} sources")
         return {"answer": answer, "sources": sources}
 
 

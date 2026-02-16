@@ -5,7 +5,7 @@ Supports cloud and local modes.
 """
 from src.utils.logger import get_logger
 from config import load_config
-from src.preprocessing.chunking import Chunk
+from src.preprocessing.models import Chunk
 
 import os
 from typing import List, Dict, Any, Optional
@@ -107,12 +107,14 @@ class QdrantVectorStore:
             "has_chart": "bool",
             "parent_doc_id": "keyword",
         }
+
         for field_name, field_type in index_fields.items():
             self.client.create_payload_index(
                 collection_name=self.collection_name,
                 field_name=field_name,
                 field_schema=field_type,
             )
+            
         logger.info(f"Created payload indexes: {list(index_fields.keys())}")
 
     @staticmethod
@@ -227,6 +229,24 @@ class QdrantVectorStore:
             f"(limit={limit}, filtered={query_filter is not None})"
         )
         return search_results
+    
+    def get_available_companies(self) -> List[str]:
+        """Fetch unique company tickers from Qdrant"""
+        try:
+            response = self.client.facet(
+                collection_name=self.collection_name,
+                key="company",
+            )
+            companies_list = [company.value for company in response.hits]
+            logger.info(
+                f"Retrieved {len(response.hits)} unique companies from collection '{self.collection_name}': {companies_list}"
+            )
+            return companies_list
+
+        except Exception as e:
+            logger.error(f"Failed to fetch companies: {e}")
+            return []
+
 
     def _build_filter(
         self,

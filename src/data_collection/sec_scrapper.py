@@ -11,52 +11,16 @@ queryApi = QueryApi(api_key=api_key)
 pdfApi = PdfGeneratorApi(api_key=api_key)
 
 COMPANIES = [ 
-    "GOOG",
-    "LLY",     # 10 - $919B
-    "WMT",     # 12 - $817B
-    "V",       # 13 - $637B
-    "ORCL",    # 14 - $635B
-    "XOM",     # 15 - $503B
-    "MA",      # 16 - $490B
-    "JNJ",     # 17 - $472B
-    "NFLX",    # 18 - $471B
-    "PLTR",    # 19 - $415B
-    "ABBV",    # 20 - $411B
-    
-    "COST",    # 21 - $409B
-    "AMD",     # 22 - $402B
-    "BAC",     # 23 - $384B
-    "HD",      # 24 - $361B
-    "PG",      # 25 - $345B
-    "GE",      # 26 - $322B
-    "CVX",     # 27 - $315B
-    "CSCO",    # 28 - $307B
-    "KO",      # 29 - $306B
-    "UNH",     # 30 - $292B
-    
-    "IBM",     # 31 - $286B
-    "MU",      # 32 - $277B
-    "WFC",     # 33 - $267B
-    "MS",      # 34 - $260B
-    "CAT",     # 35 - $260B
-    "AXP",     # 36 - $246B
-    "PM",      # 37 - $242B
-    "TMUS",    # 38 - $242B
-    "GS",      # 39 - $237B
-    "RTX",     # 40 - $235B
-    
-    "CRM",     # 41 - $232B
-    "MRK",     # 42 - $231B
-    "ABT",     # 43 - $227B
-    "MCD",     # 44 - $219B
-    "TMO",     # 45 - $217B
-    "PEP",     # 46 - $199B
-    "ISRG",    # 47 - $195B
-    "UBER",    # 48 - $190B
-    "DIS",     # 49 - $190B
-    "QCOM"     # 51 - $186B 
+    "AAPL",
+    "AMZN",
+    "AVGO",
+    "BRK.B",
+    "JPM",
+    "META",
+    "MSFT",
+    "NVDA",
+    "TSLA",
     ]
-
 
 def download_pdfs_for_company(ticker):
     """Download SEC filings as PDFs"""
@@ -88,7 +52,6 @@ def download_pdfs_for_company(ticker):
             try:
                 url = filing['linkToFilingDetails']
                 accession = filing['accessionNo'].replace('/', '-')
-                date = filing['filedAt']
                 
                 print(f"  Converting {accession}...")
                 
