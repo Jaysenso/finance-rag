@@ -1,0 +1,383 @@
+[
+  {"question": "What was the total property and equipment, net and operating leases for Amazon in the U.S. as of December 31, 2024?",
+    "ground_truth": "The total property and equipment, net and operating leases for Amazon in the U.S. as of December 31, 2024, was $241.6 billion.",
+    "context": "U.S. property and equipment, net and operating leases were $180.0 billion, $196.0 billion, and $241.6 billion, as of December 31, 2022, 2023, and 2024...",
+    "metadata": {
+      "company": "AMZN",
+      "document_type": "10-K",
+      "filing_date": "2025-12-31",
+      "page_number": 75,
+      "chunk_index": 173,
+      "parent_doc_id": "34c05899-4af0-4216-bec8-20eae760b1a4",
+      "has_table": false,
+      "has_chart": false,
+      "token_count": 308
+    },
+    "ground_truth_context": [
+      "___________________\n\n(1) Includes property and equipment added under finance leases of $422 million, $525 million, and $616 million in 2022, 2023, and 2024, and under build-to-suit lease arrangements of $3.2 billion, $356 million, and $89 million in 2022, 2023, and 2024.\n\n(2) Includes property and equipment added under finance leases of $253 million, $117 million, and $238 million in 2022, 2023, and 2024, and under build-to-suit lease arrangements of $20 million, $1 million, and $8 million in 2022, 2023, and 2024.\n\nU.S. property and equipment, net and operating leases were $180.0 billion, $196.0 billion, and $241.6 billion, as of December\u00a031, 2022, 2023, and 2024, and non-U.S. property and equipment, net and operating leases were $72.9 billion, $80.7 billion, and $87.2 billion as of December\u00a031, 2022, 2023, and 2024. Except for the U.S., property and equipment, net and operating leases in any single country were less than 10% of consolidated property and equipment, net and operating leases.\n\nDepreciation and amortization expense on property and equipment, including corporate property and equipment, are allocated to all segments based on usage. Total depreciation and amortization expense, by segment, is as follows (in millions):"
+    ]
+  },
+  {
+    "question": "What types of equity awards can be granted under Tesla's 2019 Equity Incentive Plan?",
+    "ground_truth": "The 2019 Plan provides for the grant of stock options, restricted stock, RSUs, stock appreciation rights, performance units and performance shares.",
+    "context": "The 2019 Plan provides for the grant of stock options, restricted stock, RSUs, stock appreciation rights, performance units and performance shares to our employees, directors and consultants.",
+    "metadata": {
+      "company": "TSLA",
+      "document_type": "10-K",
+      "filing_date": "2025-12-31",
+      "page_number": 83,
+      "chunk_index": 190,
+      "parent_doc_id": "0af56674-dcb2-414e-a39d-1bb80781e61a",
+      "has_table": false,
+      "has_chart": false,
+      "token_count": 249
+    },
+    "ground_truth_context": [
+      "Note 12 - Equity Incentive Plans\n\nIn June 2019, we adopted the 2019 Equity Incentive Plan (the '2019 Plan'). The 2019 Plan provides for the grant of stock options, restricted stock, RSUs, stock appreciation rights, performance units and performance shares to our employees, directors and consultants. Stock options granted under the 2019 Plan may be either incentive stock options or nonstatutory stock options. Incentive stock options may only be granted to our employees. Nonstatutory stock options may be granted to our employees, directors and consultants. Generally, our stock options and RSUs vest over four years and our stock options are exercisable over a maximum period of 10 years from their grant dates. Vesting typically terminates when the employment or consulting relationship ends.\n\nAs of December\u00a031, 2024, 113.0 million shares were reserved and available for issuance under the 2019 Plan.\n\nThe following table summarizes our stock option and RSU activity for the year ended December\u00a031, 2024:"
+    ]
+  },
+  {
+    "question": "What was GEICO's market share in the automobile insurance industry in 2023?",
+    "ground_truth": "GEICO's market share was approximately 12.3%.",
+    "context": "According to the A.M. Best data for 2023 published in 2024, the five largest automobile insurers had a combined market share of approximately 62.3% based on written premiums, with GEICO's market share being the third largest at approximately 12.3%.",
+    "metadata": {
+      "company": "BRKB",
+      "document_type": "10-K",
+      "filing_date": "2025-12-31",
+      "page_number": 6,
+      "chunk_index": 10,
+      "parent_doc_id": "b3b28a58-914f-4849-a96b-28f77b6dcb21",
+      "has_table": false,
+      "has_chart": false,
+      "token_count": 993
+    },
+    "ground_truth_context": [
+      "Except for retroactive reinsurance and periodic payment annuity products, which generate significant amounts of up-front premiums  along  with  estimated  claims  expected  to  be  paid  over  long  time  periods  (creating  'float,'  see  Investments  section), Berkshire  expects  to  achieve  an  underwriting  profit  over  time  and  that  its  managers  will  reject  inadequately  priced  risks. Underwriting profit is defined as earned premiums less incurred insurance losses and benefits, loss adjustment expenses and policy acquisition  and  other  underwriting  expenses.  Underwriting  profit  does  not  include  income  earned  from  investments.  Additional information related to each of Berkshire's underwriting groups follows.\n\nGEICO -GEICO  is  headquartered  in  Chevy  Chase,  Maryland.  GEICO's  insurance  subsidiaries  include  Government Employees Insurance Company and several other insurance entities. The GEICO insurance subsidiaries' principal business is the sale of private passenger automobile insurance to individuals in all 50 states and the District of Columbia. GEICO subsidiaries also sell insurance for motorcycles, all-terrain vehicles, recreational vehicles, boats and small commercial automobile fleets. Marketing is primarily through direct response methods in which applications for insurance are submitted directly to the companies via the Internet  or  by  telephone,  and  to  a  lesser  extent,  through  captive  agents.  GEICO  also  operates  an  insurance  agency  that  offers insurance written by third parties for individuals desiring insurance coverages that are not sold by GEICO insurance subsidiaries, such as homeowners, renters, condominium, life and identity protection insurance.\n\nGEICO competes  for  private  passenger  automobile  insurance  customers  in  the  preferred,  standard  and  non-standard  risk markets with other companies that sell directly to the customer and with companies that use agency sales forces, including State Farm, Progressive, Allstate and USAA. According to the A.M. Best data for 2023 published in 2024, the five largest automobile insurers had a combined market share of approximately 62.3% based on written premiums, with GEICO's market share being the third largest at approximately 12.3%.\n\nSeasonal variations in GEICO's insurance business are not significant. However, extraordinary weather conditions or other events and factors may have a significant effect upon the frequency or severity of automobile claims.\n\nGEICO's  insurance  policies  are  written  on  an  admitted  basis.  State  insurance  departments  stringently  regulate  private passenger auto insurance policies and rates. Competition for private passenger automobile insurance tends to focus on price and level  of  customer  service  provided.  GEICO's  cost-efficient  direct  response  marketing  methods  and  emphasis  on  customer satisfaction enable it to offer competitive rates and value to its customers. GEICO primarily uses its own claims staff to manage and settle  claims.  GEICO's  name  and  other  trademarks  are  considered  material  assets  and  are  protected  through  appropriate registrations.\n\nBerkshire  Hathaway  Primary  Group -The  Berkshire  Hathaway  Primary  Group  ('BH  Primary')  is  a  collection  of independently managed insurers that provide a wide variety of insurance coverages to policyholders located principally in the U.S. Nearly 90% of BH Primary premiums written in 2024 were in the U.S., of which approximately 60% was written on an admitted basis, with the remainder written on a non-admitted basis. These various operations are discussed below.\n\nNational  Indemnity  Company  ('NICO'),  domiciled  in  Nebraska,  and  certain  affiliates  ('NICO  Primary')  underwrite commercial automobile and general liability insurance on an admitted basis and on an excess and surplus lines basis. Insurance coverage is offered nationwide primarily through insurance agents and brokers."
+    ]
+  },
+    {
+    "question": "What new export restrictions did the U.S. government announce in Q3 2023 that impact NVIDIA's business?",
+    "ground_truth": "The U.S. government announced new export restrictions and licensing requirements targeting China's semiconductor and supercomputing industries, impacting exports of certain chips, software, hardware, equipment, and technology used to develop, produce, and manufacture certain chips to China and Russia.",
+    "context": "During the third quarter of fiscal year 2023, the U.S. government, or USG, announced new export restrictions and export licensing requirements targeting China's semiconductor and supercomputing industries. These restrictions impact exports of certain chips, as well as software, hardware, equipment, and technology used to develop, produce, and manufacture certain chips, to China (including Hong Kong and Macau) and Russia...",
+    "metadata": {
+      "company": "NVDA",
+      "document_type": "10-K",
+      "filing_date": "2023-12-31",
+      "page_number": 29,
+      "chunk_index": 59,
+      "parent_doc_id": "37519c97-51f1-4b09-8e1e-e0fdbb447182",
+      "has_table": false,
+      "has_chart": false,
+      "token_count": 934
+    },
+    "ground_truth_context": [
+      "During  the  third  quarter  of  fiscal  year  2023,  the  U.S.  government,  or  USG,  announced  new  export  restrictions  and export  licensing  requirements  targeting  China's  semiconductor  and  supercomputing  industries.  These  restrictions impact exports of certain chips, as well as software, hardware, equipment, and technology used to develop, produce, and manufacture certain chips, to China (including Hong Kong and Macau) and Russia, and specifically impact our A100 and H100 integrated circuits, DGX or any other systems or boards which incorporate A100 or H100 integrated circuits  and  our A100X.  The  new  license  requirements  also  apply  to  any  future  NVIDIA  integrated  circuit  achieving certain peak performance and chip-to-chip I/O performance thresholds, as well as any system or board that includes those  circuits.  There  are  also  now  licensing  requirements  to  export  a  wide  array  of  products,  including  networking products, destined for certain end users and for certain end uses in China.\n\nWe are required to transition certain operations out of China (including Hong Kong), which could be costly and time consuming, and adversely affect our research and development and supply and distribution operations, as well as our revenue, during any such transition period.\n\nWe have engaged with customers in China to provide alternative products not subject to the new license requirements, such  as  our  new  A800  offering.  To  the  extent  that  a  customer  requires  products  covered  by  the  new  license requirements, we may seek a license for the customer but have no assurance that the USG will grant any exemptions or licenses for any customer, or that the USG will act on them in a timely manner. The new requirements may have a disproportionate impact on NVIDIA and may disadvantage NVIDIA against certain of our competitors who sell products that are not subject to the new restrictions or may be able to acquire licenses for their products.\n\nManagement  of  these  new  license  and  other  requirements  is  complicated  and  time  consuming.  Our  results  and competitive position may be harmed if customers in China do not want to purchase our alternative product offerings, if customers purchase product from competitors, if customers develop their own internal solution, if we are unable to provide  contractual  warranty  or  other  extended  service  obligations,  if  the  USG  does  not  grant  licenses  in  a  timely manner or denies licenses to  significant  customers,  or  if  we  incur  significant  transition  costs. Additionally,  if  we  are unable to sell our alternative product offerings in China, we may have excess inventory, harming our results. Even if the USG grants any requested licenses, the licenses may be temporary or impose burdensome conditions that we cannot or choose not to fulfill. The new requirements may benefit certain of our competitors, as the licensing process will make our pre-sale and post-sale technical support efforts more cumbersome and less certain, and encourage customers in China to pursue alternatives to our products, including semiconductor suppliers based in China, Europe, and Israel.\n\nAdditionally, restrictions imposed by the Chinese government on the duration of gaming activities and access to games may adversely affect our Gaming revenue, and increased oversight of digital platform companies may adversely affect our Data Center revenue.\n\nIncreased  scrutiny  from  shareholders,  regulators  and  others  regarding  our  environmental,  social  and governance responsibilities could result in additional costs or risks and adversely impact our reputation and willingness of customers and suppliers to do business with us."
+    ]
+
+  },
+  {
+    "question": "What was the primary reason for the increase in cash from operations for Microsoft in the nine months ended March 31, 2025?",
+    "ground_truth": "The primary reason was an increase in cash received from customers.",
+    "context": "Cash from operations increased $12.2 billion to $93.5 billion for the nine months ended March 31, 2025, primarily due to an increase in cash received from customers...",
+    "metadata": {
+      "company": "MSFT",
+      "document_type": "10-Q",
+      "filing_date": "2025-09-30",
+      "page_number": 42,
+      "chunk_index": 116,
+      "parent_doc_id": "b63aa530-a645-443a-8133-278e1748117c",
+      "has_table": false,
+      "has_chart": false,
+      "token_count": 537
+    },
+    "ground_truth_context": [
+      "Cash from operations increased $12.2 billion to $93.5 billion for the nine months ended March 31, 2025, primarily due to an increase in cash received from customers, offset in part by an increase in cash paid to suppliers and employees and cash used to pay income taxes. Cash used in financing increased $26.7 billion to $40.9 billion for the nine months ended March 31, 2025, primarily due to $9.0 billion in cash used for repayments of debt, net of proceeds in the current period compared to $14.6 billion in proceeds from the issuance of debt, net of repayments in the prior period. Cash used in investing decreased $40.1 billion to $42.0 billion for the nine months ended March 31, 2025, primarily due to a $63.6 billion decrease in cash used for acquisitions of companies, net of cash acquired and divestitures, and purchases of intangible and other assets, offset in part by a $16.9 billion increase in additions to property and equipment and a $7.2 billion decrease in cash from net investment purchases, sales, and maturities.\n\nDebt Proceeds\n\nWe issue debt to take advantage of favorable pricing and liquidity in the debt markets, reflecting our credit rating. The proceeds of these issuances were or will be used for general corporate purposes, which may include, among other things, funding for working capital, capital expenditures, repurchases of capital stock, acquisitions, and repayment of existing debt. Refer to Note 10 - Debt of the Notes to Financial Statements (Part I, Item 1 of this Form 10-Q) for further discussion.\n\nUnearned Revenue\n\nUnearned  revenue  comprises  mainly  unearned  revenue  related  to  volume  licensing  programs,  which  may  include Software Assurance ('SA') and cloud services. Unearned revenue is generally invoiced annually at the beginning of each contract period for multi-year agreements and recognized ratably over the coverage period. Unearned revenue also includes payments for other offerings for which we have been paid in advance and earn the revenue when we transfer control of the product or service.\n\nThe following table outlines the expected future recognition of unearned revenue as of March 31, 2025:"
+    ]
+  },
+  {
+    "question": "What was Tesla's total inventory value as of December 31, 2024?",
+    "ground_truth": "Tesla's total inventory value was $12,017 million.",
+    "context": "Total $ 12,017",
+    "metadata": {
+      "company": "TSLA",
+      "document_type": "10-K",
+      "filing_date": "2025-12-31",
+      "page_number": 96,
+      "chunk_index": 222,
+      "parent_doc_id": "0af56674-dcb2-414e-a39d-1bb80781e61a",
+      "has_table": true,
+      "has_chart": false,
+      "token_count": 125
+    },
+    "ground_truth_context": [
+      "The following table presents inventory by reportable segment (in millions):\n\n|                               | December 31, 2024   | December 31, 2023   |\n|-------------------------------|---------------------|---------------------|\n| Automotive                    | $ 9,988             | $ 11,139            |\n| Energy generation and storage | 2,029               | 2,487               |\n| Total                         | $ 12,017            | $ 13,626            |\n\nNote 18 - Restructuring and Other"
+    ]
+  },
+  {
+    "question": "What potential risks does NVDA face in the Chinese market according to their 2025-09-30 10-Q filing?",
+    "ground_truth": "NVDA faces multiple risks in China including government restrictions on gaming activities, increased oversight of digital platform companies, encouragement of customers to purchase from China-based competitors, restrictions on purchasing/importing/using NVDA data center products, and potential new standards for compute performance that could prevent NVDA from designing compliant products.",
+    "context": "Additionally, restrictions imposed by the Chinese government on the duration of gaming activities and access to games may adversely affect our Gaming revenue, and even if we are able to participate in the China data center compute market, increased oversight of digital platform companies may adversely affect our Data Center revenue. The Chinese government has encouraged customers to purchase from our China-based competitors and restricted customers from purchasing, importing, or using our data center products, including any China-specific product designed to comply with U.S. export controls. As another example, an agency of the Chinese government announced an Action Plan that endorses new standards regarding the compute performance per watt and per memory bandwidth of accelerators used in new and renovated data centers in China.",
+    "metadata": {
+      "company": "NVDA",
+      "document_type": "10-Q",
+      "filing_date": "2025-09-30",
+      "page_number": 41,
+      "chunk_index": 118,
+      "parent_doc_id": "8e8bc83a-b579-4836-ba79-aade5df23c7c",
+      "has_table": false,
+      "has_chart": false,
+      "token_count": 719
+    },
+    "ground_truth_context": [
+      "Additionally,  restrictions  imposed  by  the  Chinese  government  on  the  duration  of  gaming  activities  and  access  to  games  may adversely affect our Gaming revenue, and even if we are able to participate in the China data center compute market, increased oversight of digital platform companies may adversely affect our Data Center revenue. The Chinese government has encouraged customers to purchase from our China-based competitors and restricted customers from purchasing, importing, or using our data center products, including any China-specific product designed to comply with U.S. export controls. As another example, an agency of the Chinese government announced an Action Plan that endorses new standards regarding the compute performance per watt and per memory bandwidth of accelerators used in new and renovated data centers in China. Although we are already effectively foreclosed from the China market by U.S. export controls, if those controls changed to allow us to return to the market, the Chinese government could modify or implement the Action Plan in a way that effectively prevents us from being able to design products to meet the new standard, which may restrict the ability of customers to use some of our data center products and may have a material and adverse impact on our business, operating results and financial condition. Further restrictions on our products or the products of our suppliers could negatively impact our business and financial results.\n\nFinally,  our  business  depends  on  our  ability  to  receive  consistent  and  reliable  supply  from  our  overseas  partners,  especially  in Taiwan and South Korea. Any new restrictions that negatively impact our ability to receive supply of components, parts, or services from Taiwan and South Korea, would negatively impact our business and financial results.\n\nItem 2. Unregistered Sales of Equity Securities and Use of Proceeds\n\nIssuer Purchases of Equity Securities\n\nOn  August  26,  2025,  our  Board  of  Directors  approved  an  additional  $60.0\u00a0 billion  in  share  repurchase  authorization,  without expiration.\n\nWe repurchased 70\u00a0million and 262\u00a0million shares of our common stock for $12.6\u00a0billion and $36.7\u00a0billion during the third quarter and first nine months of fiscal year 2026, respectively. As of October\u00a026, 2025, we were authorized, subject to certain specifications, to repurchase up to $62.2 billion of our common stock.\n\nWe paid cash dividends to our shareholders of $243\u00a0million and $732\u00a0million during the third quarter and first nine months of fiscal year 2026, respectively. The payment of future cash dividends is subject to our Board of Directors' continuing determination that the declaration of dividends is in the best interests of our shareholders.\n\nThe following table presents details of our share repurchase transactions during the third quarter of fiscal year 2026:"
+    ]
+  },
+  {
+    "question": "What were Amazon's cash, cash equivalents, and marketable securities balances as of December 31, 2024?",
+    "ground_truth": "Amazon's cash, cash equivalents, and marketable securities balances were $101.2 billion as of December 31, 2024.",
+    "context": "Our principal sources of liquidity are cash flows generated from operations and our cash, cash equivalents, and marketable securities balances, which, at fair value, were $86.8 billion and $101.2 billion as of December\u00a031, 2023 and 2024.",
+    "metadata": {
+      "company": "AMZN",
+      "document_type": "10-K",
+      "filing_date": "2025-12-31",
+      "page_number": 24,
+      "chunk_index": 51,
+      "parent_doc_id": "34c05899-4af0-4216-bec8-20eae760b1a4",
+      "has_table": false,
+      "has_chart": false,
+      "token_count": 948
+    },
+    "ground_truth_context": [
+      "Our principal sources of liquidity are cash flows generated from operations and our cash, cash equivalents, and marketable securities balances, which, at fair value, were $86.8 billion and $101.2 billion as of December\u00a031, 2023 and 2024. Amounts held in foreign currencies were $23.5 billion and $25.5 billion as of December\u00a031, 2023 and 2024. Our foreign currency balances include British Pounds, Canadian Dollars, Euros, Indian Rupees, and Japanese Yen.\n\nCash provided by (used in) operating activities was $84.9 billion and $115.9 billion in 2023 and 2024. Our operating cash flows result primarily from cash received from our consumer, seller, developer, enterprise, and content creator customers, and advertisers, offset by cash payments we make for products and services, employee compensation, payment processing and related transaction costs, operating leases, and interest payments. Cash received from our customers and other activities generally corresponds to our net sales. The increase in operating cash flow in 2024, compared to the prior year, was due to an increase in net income (loss), excluding non-cash expenses, and changes in working capital. Working capital at any specific point in time is subject to many variables, including variability in demand, inventory management and category expansion, the timing of cash receipts and payments, customer and vendor payment terms, and fluctuations in foreign exchange rates.\n\nCash provided by (used in) investing activities corresponds with cash capital expenditures, including leasehold improvements, incentives received from property and equipment vendors, proceeds from asset sales, cash outlays for\n\nacquisitions, investments in other companies and intellectual property rights, and purchases, sales, and maturities of marketable securities. Cash provided by (used in) investing activities was $(49.8) billion and $(94.3) billion in 2023 and 2024, with the variability caused primarily by purchases, sales, and maturities of marketable securities and cash capital expenditures. Cash capital expenditures were $48.1 billion, and $77.7 billion in 2023 and 2024, which primarily reflect investments in technology infrastructure (the majority of which is to support AWS business growth) and in additional capacity to support our fulfillment network. We expect cash capital expenditures to increase in 2025, primarily driven by investments in technology infrastructure. We made cash payments, net of acquired cash, related to acquisition and other investment activity of $5.8 billion and $7.1 billion in 2023 and 2024. We funded the acquisition of 1Life Healthcare, Inc. (One Medical) in 2023 with cash on hand. In Q3 2023, we invested $1.25 billion in a convertible note from Anthropic, PBC. In Q1 2024, we invested $2.75 billion in a second convertible note. In Q4 2024, we entered into an agreement and invested $1.3 billion in a third convertible note, and will invest an additional $2.7 billion by Q4 2025.\n\nCash provided by (used in) financing activities was $(15.9) billion and $(11.8) billion in 2023 and 2024. Cash inflows from financing activities resulted from proceeds from short-term debt, and other and long-term-debt of $18.1 billion and $5.1 billion in 2023 and 2024. Cash outflows from financing activities resulted from payments of short-term debt, and other, long-term debt, finance leases, and financing obligations of $34.0 billion and $17.0 billion in 2023 and 2024. Property and equipment acquired under finance leases was $642 million and $854 million in 2023 and 2024.\n\nWe had no borrowings outstanding under the two unsecured revolving credit facilities or the commercial paper programs as of December\u00a031, 2024. See Item\u00a08 of Part II, 'Financial Statements and Supplementary Data - Note 6 - Debt' for additional information."
+    ]
+  },
+   {
+    "question": "How many employees did NVIDIA have globally as of the end of fiscal year 2023?",
+    "ground_truth": "NVIDIA had 26,196 employees in 35 countries as of the end of fiscal year 2023.",
+    "context": "As of the end of fiscal year 2023, we had 26,196 employees in 35 countries...",
+    "metadata": {
+      "company": "NVDA",
+      "document_type": "10-K",
+      "filing_date": "2023-12-31",
+      "page_number": 12,
+      "chunk_index": 23,
+      "parent_doc_id": "37519c97-51f1-4b09-8e1e-e0fdbb447182",
+      "has_table": false,
+      "has_chart": false,
+      "token_count": 1013
+    },
+    "ground_truth_context": [
+      "NVIDIA  invents  computing  technologies  that  improve  lives  and  address  global  challenges.  Our  goal  is  to  integrate sound  environmental,  social  and  corporate  governance,  or  ESG,  principles  and  practices  into  every  aspect  of  the Company. The Nominating and Corporate Governance Committee of our Board of Directors is responsible for reviewing and discussing with management our practices related to ESG. We assess our programs annually in consideration of stakeholder  expectations,  market  trends,  and  business  risks  and  opportunities.  These  issues  are  important  for  our continued business success and reflect the topics of highest concern to NVIDIA and our stakeholders.\n\nThe following section and the Human Capital Management Section below provide an overview of our principles and practices.  More  information  can  be  found  on  the  Corporate  Responsibility  section  of  our  website  and  in  our  annual Corporate Responsibility Report, or CR Report. Information contained on our website or in our annual CR Report is not incorporated by reference into this or any other report we file with the Securities and Exchange Commission, or the SEC. Refer to 'Item 1A. Risk Factors' for a discussion of risks and uncertainties we face related to ESG.\n\nClimate Change\n\nIn the area of sustainability, we address our climate impacts across our product lifecycle and assess risks, including current and emerging regulations and market impacts.\n\nIn our CR Report published in July 2022, we published metrics related to our environmental impact for fiscal year 2022. Fiscal year 2023 metrics are expected to be published in the first half of fiscal year 2024. There has been no material impact to our capital expenditures, results of operations or competitive position associated with global sustainability regulations,  compliance,  or  costs  from  sourcing  renewable  energy.  By  the  end  of  fiscal  year  2025,  our  goal  is  to purchase or generate enough renewable energy to match 100% of our global electricity usage for our offices and data centers.\n\nWhether  it  is  creation  of  technology  to  power  next-generation  laptops  or  designs  to  support  high-performance supercomputers, improving energy efficiency is important in our research, development, and design processes. GPUs are  inherently  more  energy  efficient  than  other  forms  of  computing  because  they  are  optimized  for  throughput, performance per watt, and certain AI workloads. The energy efficiency of our products is evidenced by our continued strong presence on the Green500 list of the most energy-efficient systems. We powered 23 of the top 30 most energy efficient systems, including the top supercomputer, on the November 2022 Green500 list.\n\nWe plan to build Earth-2, a digital twin of the Earth on NVIDIA AI and NVIDIA Omniverse platforms. Earth-2 will enable scientists, companies, and policy makers to do ultra-high-resolution predictions of the impact of climate change and explore mitigation and adaptation strategies.\n\nHuman Capital Management\n\nWe believe that our employees are our greatest assets, and they play a key role in creating long-term value for our stakeholders. As of the end of fiscal year 2023, we had 26,196 employees in 35 countries, 19,532 were engaged in research and development and 6,664 were engaged in sales, marketing, operations, and administrative positions.\n\nTo  be  competitive  and  execute  our  business  strategy  successfully,  we  must  recruit,  develop,  and  retain  talented employees, including qualified executives, scientists, engineers, and technical and non-technical staff.\n\nRecruitment\n\nAs the demand for global technical talent continues to be competitive, we have grown our technical workforce and have been successful in attracting top talent to NVIDIA. We have attracted strong talent globally with our differentiated hiring strategies for university, professional, executive and diverse recruits. The COVID-19 pandemic created expanded hiring opportunities in new geographies and provided increased"
+    ]
+  },
+  {
+    "question": "What was NVIDIA's total current assets as of October 26, 2025?",
+    "ground_truth": "NVIDIA's total current assets were $116,492 million.",
+    "context": "Total current assets $ 116,492",
+    "metadata": {
+      "company": "NVDA",
+      "document_type": "10-Q",
+      "filing_date": "2025-09-30",
+      "page_number": 5,
+      "chunk_index": 11,
+      "parent_doc_id": "8e8bc83a-b579-4836-ba79-aade5df23c7c",
+      "has_table": true,
+      "has_chart": false,
+      "token_count": 781
+    },
+    "ground_truth_context": [
+      "NVIDIA Corporation and Subsidiaries Condensed Consolidated Balance Sheets (In millions) (Unaudited)\n\n|                                             | Oct 26, 2025   | Jan 26, 2025   |\n|---------------------------------------------|----------------|----------------|\n| Assets                                      |                |                |\n| Current assets:                             |                |                |\n| Cash and cash equivalents                   | $ 11,486       | $ 8,589        |\n| Marketable securities                       | 49,122         | 34,621         |\n| Accounts receivable, net                    | 33,391         | 23,065         |\n| Inventories                                 | 19,784         | 10,080         |\n| Prepaid expenses and other current assets   | 2,709          | 3,771          |\n| Total current assets                        | 116,492        | 80,126         |\n| Property and equipment, net                 | 9,780          | 6,283          |\n| Operating lease assets                      | 2,281          | 1,793          |\n| Goodwill                                    | 6,261          | 5,188          |\n| Intangible assets, net                      | 936            | 807            |\n| Deferred income tax assets                  | 13,674         | 10,979         |\n| Other assets                                | 11,724         | 6,425          |\n| Total assets                                | $ 161,148      | $ 111,601      |\n| Liabilities and Shareholders' Equity        |                |                |\n| Current liabilities:                        |                |                |\n| Accounts payable                            | $ 8,624        | $ 6,310        |\n| Accrued and other current liabilities       | 16,452         | 11,737         |\n| Short-term debt                             | 999            | -              |\n| Total current liabilities                   | 26,075         | 18,047         |\n| Long-term debt                              | 7,468          | 8,463          |\n| Long-term operating lease liabilities       | 2,014          | 1,519          |\n| Other long-term liabilities                 | 6,694          | 4,245          |\n| Total liabilities                           | 42,251         | 32,274         |\n| Commitments and contingencies - see Note 11 |                |                |\n| Shareholders' equity:                       |                |                |\n| Preferred stock                             | -              | -              |\n| Common stock                                | 24             | 24             |\n| Additional paid-in capital                  | 10,626         | 11,237         |\n| Accumulated other comprehensive income      | 339            | 28             |\n| Retained earnings                           | 107,908        | 68,038         |\n| Total shareholders' equity                  | 118,897        | 79,327         |\n| Total liabilities and shareholders' equity  | $ 161,148      | $ 111,601      |\n\nSee accompanying Notes to Condensed Consolidated Financial Statements."
+    ]
+  },
+  {
+    "question": "What type of financial statement information is provided in the BRKB 10-K filing dated 2025-12-31?",
+    "ground_truth": "The filing includes unaudited required supplemental information and notes to consolidated financial statements.",
+    "context": "Unaudited required supplemental information\nNotes to Consolidated Financial Statements",
+    "metadata": {
+      "company": "BRKB",
+      "document_type": "10-K",
+      "filing_date": "2025-12-31",
+      "page_number": 103,
+      "chunk_index": 271,
+      "parent_doc_id": "b3b28a58-914f-4849-a96b-28f77b6dcb21",
+      "has_table": false,
+      "has_chart": false,
+      "token_count": 45
+    },
+    "ground_truth_context": [
+      "* Unaudited required supplemental information\n\nNotes to Consolidated Financial Statements\n\n(16) Unpaid losses and loss adjustment expenses\n\nCasualty\n\nLosses and ALAE Incurred through December 31,"
+    ]
+  },
+  {
+    "question": "What was the carrying value of equity securities without readily determinable fair values held by JPM as of December 31, 2024?",
+    "ground_truth": "The carrying value was $3,737 million.",
+    "context": "Carrying value (a) $ 3,737",
+    "metadata": {
+      "company": "JPM",
+      "document_type": "10-K",
+      "filing_date": "2025-12-31",
+      "page_number": 202,
+      "chunk_index": 429,
+      "parent_doc_id": "5447e02e-ccc2-4143-9d45-c358cf4e53d4",
+      "has_table": true,
+      "has_chart": false,
+      "token_count": 263
+    },
+    "ground_truth_context": [
+      "The following table presents the carrying value of equity securities without readily determinable fair values held as of December\u00a031, 2024 and 2023, that are measured under the measurement alternative and the related adjustments recorded during the periods presented for those securities with observable price changes. These securities are included in the nonrecurring fair value tables when applicable price changes are observable.\n\n| As of or for the year ended December 31, (in millions)   | 2024    | 2023    |\n|----------------------------------------------------------|---------|---------|\n| Other assets                                             |         |         |\n| Carrying value (a)                                       | $ 3,737 | $ 4,457 |\n| Upward carrying value changes (b)                        | 89      | 93      |\n| Downward carrying value changes/impairment (c)           | (286)   | (325)   |\n\n(a) The period-end carrying values reflect cumulative purchases and sales in addition to upward and downward carrying value changes."
+    ]
+  },
+  {
+    "question": "What percentage of BRKB's foreign government holdings were rated AA or higher as of December 31, 2024?",
+    "ground_truth": "Approximately 94% of BRKB's foreign government holdings were rated AA or higher.",
+    "context": "As of December 31, 2024, approximately 94% of our foreign government holdings were rated AA or higher by at least one of the major rating agencies.",
+    "metadata": {
+      "company": "BRKB",
+      "document_type": "10-K",
+      "filing_date": "2025-12-31",
+      "page_number": 88,
+      "chunk_index": 197,
+      "parent_doc_id": "b3b28a58-914f-4849-a96b-28f77b6dcb21",
+      "has_table": false,
+      "has_chart": false,
+      "token_count": 110
+    },
+    "ground_truth_context": [
+      "As of December 31, 2024, approximately 94% of our foreign government holdings were rated AA or higher by at least one of the  major  rating  agencies.  The  amortized  cost  and  estimated  fair  value  of  fixed  maturity  securities  at  December  31,  2024  are summarized  below  by  contractual  maturity  dates  (in  millions).  Actual  maturities  may  differ  from  contractual  maturities  due  to prepayment rights held by issuers."
+    ]
+  },
+  {
+    "question": "What was the weighted average grant-date fair value of stock awards granted in fiscal year 2025?",
+    "ground_truth": "The weighted average grant-date fair value of stock awards granted was $413.90.",
+    "context": "The weighted average grant-date fair value of stock awards granted was $413.90, $339.46, and $252.59 for fiscal years 2025, 2024, and 2023, respectively.",
+    "metadata": {
+      "company": "MSFT",
+      "document_type": "10-K",
+      "filing_date": "2025-12-31",
+      "page_number": 82,
+      "chunk_index": 208,
+      "parent_doc_id": "c4411868-96c3-45af-a831-9d9e9a3daac2",
+      "has_table": false,
+      "has_chart": false,
+      "token_count": 291
+    },
+    "ground_truth_context": [
+      "(a) Includes 1 million of PSUs granted at target and performance adjustments above target levels for each of the fiscal years 2025, 2024, and 2023.\n\nAs of June 30, 2025, total unrecognized compensation costs related to stock awards were $21.6 billion. These costs are expected to be recognized over a weighted average period of three years. The weighted average grant-date fair value of stock awards granted was $413.90, $339.46, and $252.59 for fiscal years 2025, 2024, and 2023, respectively. The fair value of stock awards vested was $16.2 billion, $16.0 billion, and $11.9 billion, for fiscal years 2025, 2024, and 2023, respectively. As of June 30, 2025, an aggregate of 98 million shares were authorized for future grant under our stock plans.\n\nEmployee Stock Purchase Plan\n\nWe have an ESPP for all eligible employees. Shares of our common stock may be purchased by employees at threemonth intervals at 90% of the fair market value on the last trading day of each three-month period. Employees may purchase shares having a value not exceeding 15% of their gross compensation during an offering period.\n\nEmployees purchased the following shares during the periods presented:"
+    ]
+  },
+   {
+    "question": "What was Microsoft's research and development expense in 2025?",
+    "ground_truth": "Microsoft's research and development expense was $32,488 million in 2025.",
+    "context": "Research and development expenses include payroll, employee benefits, stock-based compensation expense, and other headcount-related expenses associated with product development.",
+    "metadata": {
+      "company": "MSFT",
+      "document_type": "10-K",
+      "filing_date": "2025-12-31",
+      "page_number": 41,
+      "chunk_index": 81,
+      "parent_doc_id": "c4411868-96c3-45af-a831-9d9e9a3daac2",
+      "has_table": true,
+      "has_chart": false,
+      "token_count": 199
+    },
+    "ground_truth_context": [
+      "Research and Development\n\n| (In millions, except percentages)   | 2025     | 2024     | Percentage Change   |\n|-------------------------------------|----------|----------|---------------------|\n| Research and development            | $ 32,488 | $ 29,510 | 10%                 |\n| As a percent of revenue             | 12%      | 12%      | 0ppt                |\n\nResearch  and  development  expenses  include  payroll,  employee  benefits,  stock-based  compensation  expense,  and other headcount-related expenses associated with product development. Research and development expenses also include technology development costs, including AI training and other infrastructure costs, third-party development and programming costs, and the amortization of purchased software code and services content."
+    ]
+  },
+  {
+    "question": "What were Berkshire Hathaway's total notes payable and other borrowings as of December 31, 2024?",
+    "ground_truth": "Berkshire Hathaway's total notes payable and other borrowings were $44,885 million as of December 31, 2024.",
+    "context": "Short-term subsidiary borrowings                 | 6.3%               | 1,315          | 1,187          |                                                  |                    | $ 44,885       | $ 48,468       |",
+    "metadata": {
+      "company": "BRKB",
+      "document_type": "10-K",
+      "filing_date": "2025-12-31",
+      "page_number": 107,
+      "chunk_index": 288,
+      "parent_doc_id": "b3b28a58-914f-4849-a96b-28f77b6dcb21",
+      "has_table": true,
+      "has_chart": false,
+      "token_count": 593
+    },
+    "ground_truth_context": [
+      "Notes payable and other borrowings of our insurance and other businesses are summarized below (dollars in millions). The weighted average interest rates and maturity date ranges are based on borrowings as of December 31, 2024.\n\n|                                                  | Weighted Average   | December 31,   | December 31,   |\n|--------------------------------------------------|--------------------|----------------|----------------|\n|                                                  | Interest Rate      | 2024           | 2023           |\n| Insurance and other:                             |                    |                |                |\n| Berkshire Hathaway Inc. ('Berkshire'):           |                    |                |                |\n| U.S. Dollar denominated due 2025-2047            | 3.5%               | $ 3,749        | $ 3,740        |\n| Euro denominated due 2025-2041                   | 1.1%               | 4,733          | 6,145          |\n| Japanese Yen denominated due 2025-2060           | 1.0%               | 12,609         | 8,896          |\n| Berkshire Hathaway Finance Corporation ('BHFC'): |                    |                |                |\n| U.S. Dollar denominated due 2027-2052            | 3.6%               | 14,469         | 14,463         |\n| Great Britain Pound denominated due 2039-2059    | 2.5%               | 2,156          | 2,191          |\n| Euro denominated due 2030-2034                   | 1.8%               | 1,290          | 1,374          |\n| Pilot Travel Centers ('Pilot')                   | -                  | -              | 5,776          |\n| Other subsidiary borrowings due 2025-2051        | 4.5%               | 4,564          | 4,696          |\n| Short-term subsidiary borrowings                 | 6.3%               | 1,315          | 1,187          |\n|                                                  |                    | $ 44,885       | $ 48,468       |\n\nBerkshire parent company borrowings consist of senior unsecured debt. In 2024, Berkshire repaid approximately $1.9 billion of maturing senior notes. At various dates in 2024, Berkshire borrowed approximately \u00a5837.4 billion (approximately $5.5 billion) under senior note issuances and term loan agreements. The borrowings have interest rates ranging from 0.974% to 2.625% and maturity dates ranging from 2027 to 2054."
+    ]
+  },
+   {
+    "question": "What was Microsoft's net recognized gain on investments for the nine months ended March 31, 2025?",
+    "ground_truth": "Microsoft had a net recognized loss of $286 million on investments for the nine months ended March 31, 2025.",
+    "context": "Net recognized gains (losses) on investments... 2025... (286)",
+    "metadata": {
+      "company": "MSFT",
+      "document_type": "10-Q",
+      "filing_date": "2025-09-30",
+      "page_number": 40,
+      "chunk_index": 111,
+      "parent_doc_id": "b63aa530-a645-443a-8133-278e1748117c",
+      "has_table": true,
+      "has_chart": false,
+      "token_count": 576
+    },
+    "ground_truth_context": [
+      "The components of other income (expense), net were as follows:\n\n| (In millions)                                         | Three Months Ended March 31,   | Three Months Ended March 31,   | Nine Months Ended March 31,   | Nine Months Ended March 31,   |\n|-------------------------------------------------------|--------------------------------|--------------------------------|-------------------------------|-------------------------------|\n|                                                       | 2025                           | 2024                           | 2025                          | 2024                          |\n| Interest and dividends income                         | $ 597                          | $ 619                          | $ 1,878                       | $ 2,519                       |\n| Interest expense                                      | (594)                          | (800)                          | (1,770)                       | (2,234)                       |\n| Net recognized gains (losses) on investments          | 111                            | (25)                           | (286)                         | (63)                          |\n| Net gains (losses) on derivatives                     | 187                            | (24)                           | (267)                         | (198)                         |\n| Net gains (losses) on foreign currency remeasurements | 89                             | (138)                          | 112                           | (203)                         |\n| Other, net                                            | (1,013)                        | (486)                          | (2,861)                       | (792)                         |\n| Total                                                 | $ (623)                        | $ (854)                        | $ (3,194)                     | $ (971)                       |\n\nWe use derivative instruments to manage risks related to foreign currencies, interest rates, equity prices, and credit; to enhance investment returns; and to facilitate portfolio diversification. Gains and losses from changes in fair values of derivatives that are not designated as hedging instruments are primarily recognized in other income (expense), net."
+    ]
+  },
+  {
+    "question": "How many shares of common stock did JPM repurchase in 2024?",
+    "ground_truth": "JPM repurchased 91.7 million shares of common stock in 2024.",
+    "context": "Total number of shares of common stock repurchased 91.7",
+    "metadata": {
+      "company": "JPM",
+      "document_type": "10-K",
+      "filing_date": "2025-12-31",
+      "page_number": 107,
+      "chunk_index": 221,
+      "parent_doc_id": "5447e02e-ccc2-4143-9d45-c358cf4e53d4",
+      "has_table": true,
+      "has_chart": false,
+      "token_count": 168
+    },
+    "ground_truth_context": [
+      "The following table sets forth the Firm's repurchases of common stock for the years ended December\u00a031, 2024, 2023 and 2022.\n\n| Year ended December 31, (in millions)                    | 2024     | 2023    | 2022 (b)   |\n|----------------------------------------------------------|----------|---------|------------|\n| Total number of shares of common stock repurchased       | 91.7     | 69.5    | 23.1       |\n| Aggregate purchase price of common stock repurchases (a) | $ 18,841 | $ 9,898 | $ 3,122    |\n\n(a) Excludes excise tax and commissions. As part of the Inflation Reduction Act of 2022, a 1% excise tax is imposed on net share repurchases commencing January 1, 2023."
+    ]
+  },
+   {
+    "question": "What were the capital expenditures for BRKB in 2024?",
+    "ground_truth": "Capital expenditures for BRKB in 2024 were $19,409 million.",
+    "context": "Capital expenditures 2023 2024 99 $ 3,690 9,013 2,779 799 236 2,360 68 $ 3,920 9,148 2,714 705 264 2,590 18,976 $ 19,409 $",
+    "metadata": {
+      "company": "BRKB",
+      "document_type": "10-K",
+      "filing_date": "2025-12-31",
+      "page_number": 122,
+      "chunk_index": 341,
+      "parent_doc_id": "b3b28a58-914f-4849-a96b-28f77b6dcb21",
+      "has_table": false,
+      "has_chart": false,
+      "token_count": 252
+    },
+    "ground_truth_context": [
+      "Capital expenditures\n\n2023\n\n2024\n\n99 \u00a0 $\n\n3,690\n\n9,013\n\n2,779\n\n799\n\n236\n\n2,360\n\n68 \u00a0 $\n\n3,920\n\n9,148\n\n2,714\n\n705\n\n264\n\n2,590\n\n18,976 \u00a0 $\n\n19,409 \u00a0 $\n\nGoodwill at year-end\n\n2024\n\n2023\n\n16,557\u00a0 $\n\n15,351\n\n11,669\n\n27,716\n\n6,477\n\n232\n\n5,878\n\n83,880\u00a0 $\n\n16,563\u00a0 $\n\n15,350\n\n11,804\n\n27,831\n\n6,605\n\n232\n\n6,241\n\n84,626\u00a0 $\n\nDepreciation and amortization\n\n2024\n\n2023\n\n411 \u00a0 $\n\n2,621\n\n4,003\n\n2,422\n\n1,012\n\n217\n\n1,522\n\n12,208\n\n647\n\n401 \u00a0 $\n\n2,627\n\n4,010\n\n2,290\n\n796\n\n208\n\n1,335\n\n11,667\n\n819\n\n12,855 \u00a0 $\n\n12,486 \u00a0 $\n\nIdentifiable assets at year-end\n\n2024\n\n2023\n\n539,884\u00a0 $\n\n80,813\n\n128,276\n\n119,860\n\n19,652\n\n7,165\n\n37,198\n\n932,848\n\n137,153\n\n538,860\u00a0 $\n\n79,227\n\n124,383\n\n115,875\n\n21,404\n\n6,861\n\n34,600\n\n921,210\n\n64,142\n\n83,880\n\n84,626\n\n$ 1,153,881 \u00a0 $ 1,069,978 \u00a0 $\n\n2022\n\n459,917\n\n77,752\n\n118,114\n\n113,578\n\n-\n\n7,049\n\n31,291\n\n807,701\n\n62,645\n\n78,119\n\n948,465\n\n2022\n\n260\n\n2,510\n\n3,751\n\n2,140\n\n-\n\n176\n\n1,245\n\n10,082\n\n817\n\n10,899\n\nBusiness segments\n\nInsurance\n\nBNSF\n\nBHE\n\nManufacturing\n\nPilot\n\nMcLane\n\nService and retailing\n\nReconciliation to consolidated amount\n\nCorporate, eliminations and other\n\nBusiness segments\n\nInsurance\n\nBNSF\n\nBHE\n\nManufacturing\n\nPilot\n\nMcLane\n\nService and retailing\n\nReconciliation to consolidated amount\n\nCorporate and other\n\nGoodwill\n\n$\n\n$\n\n$\n\n$\n\n2022\n\n82 \u00a0 \u00a0 $\n\n3,532\n\n7,505\n\n2,477\n\n-\n\n93\n\n1,775\n\n15,464\n\n$\n\n2022\n\n16,548\u00a0 \u00a0 $\n\n14,852\n\n11,745\n\n28,460\n\n-\n\n232\n\n6,282\n\n78,119\n\nNotes to Consolidated Financial Statements\n\n(26) Business segment data\n\nProperty/casualty and life/health insurance premiums written and earned are summarized below (in millions)."
+    ]
+  },
+  {
+    "question": "What was NVIDIA's revenue by reportable segments in Q3 2025?",
+    "ground_truth": "NVIDIA's revenue by reportable segments was $26.3 billion.",
+    "context": "Revenue by Reportable Segments",
+    "metadata": {
+      "company": "NVDA",
+      "document_type": "10-Q",
+      "filing_date": "2025-09-30",
+      "page_number": 28,
+      "chunk_index": 78,
+      "parent_doc_id": "8e8bc83a-b579-4836-ba79-aade5df23c7c",
+      "has_table": false,
+      "has_chart": false,
+      "token_count": 7
+    },
+    "ground_truth_context": [
+      "Revenue by Reportable Segments"
+    ]
+  }
+
+]

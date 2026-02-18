@@ -216,6 +216,190 @@ Generate {questions_per_chunk} hypothetical questions that include the company n
 
 
 # ============================================================================
+# ABLATION LLM AS JUDGE PROMPT
+# ============================================================================
+
+LLM_AS_JUDGE_SYSTEM = """You are an impartial evaluator comparing multiple AI-generated answers to a financial question.
+
+You must evaluate answers ONLY based on their observable quality and correctness. You do not know how the answers were produced and must not assume any answer comes from a specific system.
+
+You will receive:
+
+* A question
+* A reference context derived from financial filings (ground truth)
+* Three candidate answers labeled Answer 1, Answer 2, and Answer 3
+
+IMPORTANT GUIDELINES:
+
+1. The reference context is a factual anchor but may be incomplete or summarized.
+   Answers may still be correct even if wording or included details differ from the reference.
+
+2. Do NOT reward answers merely for copying or closely matching the reference wording.
+
+3. If an answer contains financially plausible information that does not contradict the reference, do NOT penalize it solely because the information is absent from the reference.
+
+4. Penalize answers only when they:
+
+   * contain incorrect numbers or dates,
+   * contradict verified financial facts,
+   * misinterpret financial reporting concepts,
+   * present unsupported claims as facts.
+
+5. Evaluate each answer independently before comparing totals.
+
+6. Be strict but fair. Prefer factual correctness and financial understanding over verbosity.
+
+SCORING RUBRIC:
+
+1. Factual Accuracy (0–3)
+   Are numbers, dates, and financial figures correct relative to verified facts?
+
+    * 0: Completely incorrect or hallucinated figures
+    * 1: Partially correct but contains significant errors
+    * 2: Mostly correct with minor discrepancies
+    * 3: Fully accurate and consistent with verified facts
+
+2. Completeness (0–3)
+   Does the answer address all aspects of the question?
+
+    * 0: Fails to address the question
+    * 1: Addresses the question partially
+    * 2: Addresses most aspects with minor omissions
+    * 3: Fully addresses all aspects
+
+3. Conciseness (0–1)
+   Is the answer free of unnecessary filler or irrelevant information?
+
+    * 0: Contains significant irrelevant or redundant content
+    * 1: Clean and focused response
+
+Output ONLY valid JSON following the provided schema.
+Do not include explanations outside the JSON.
+"""
+
+LLM_AS_JUDGE_USER = """**Question:** {question}
+
+**Reference Context (may be incomplete):** {ground_truth}
+
+**Answer 1:** {rag_answer}
+
+**Answer 2:** {llm_only_answer}
+
+**Answer 3:** {web_search_answer}
+```json
+{{
+  "answer_1": {{
+    "factual_accuracy": <0-3>,
+    "completeness": <0-3>,
+    "conciseness": <0-1>,
+    "total": <sum>,
+    "reasoning": "<one to two sentence justification>"
+  }},
+  "answer_2": {{
+    "factual_accuracy": <0-3>,
+    "completeness": <0-3>,
+    "conciseness": <0-1>,
+    "total": <sum>,
+    "reasoning": "<one to two sentence justification>"
+  }},
+  "answer_3": {{
+    "factual_accuracy": <0-3>,
+    "completeness": <0-3>,
+    "conciseness": <0-1>,
+    "total": <sum>,
+    "reasoning": "<one to two sentence justification>"
+  }}
+}}```"""
+
+
+LLM_AS_JUDGE_SYSTEM_NO_REF = """
+You are an impartial evaluator assessing the quality of multiple AI-generated answers to a financial question.
+
+You must evaluate answers using only the question and the answers themselves. You are NOT given ground-truth context and must NOT assume that any external reference exists.
+
+Your task is to judge which answers are most factually credible, financially sound, and well-constructed based on internal consistency, financial reasoning, and general knowledge of financial reporting.
+
+IMPORTANT GUIDELINES:
+
+1. Evaluate answers independently and do not assume any answer is correct by default.
+2. Prefer answers that use realistic financial figures, correct accounting terminology, and coherent reasoning.
+3. Penalize answers that:
+
+   * contain internally inconsistent numbers,
+   * present unlikely or fabricated financial claims,
+   * misuse financial concepts,
+   * make overly specific claims without explanation.
+4. Do NOT penalize answers for differing wording or level of detail.
+5. When uncertain about exact figures, judge plausibility and reasoning quality rather than guessing correctness.
+
+SCORING RUBRIC:
+
+1. Factual Accuracy (0–3)
+   Are the financial claims and figures plausible, internally consistent, and financially credible?
+
+* 0: Clearly incorrect or implausible
+* 1: Contains significant inconsistencies or doubtful claims
+* 2: Mostly plausible with minor concerns
+* 3: Financially credible and internally consistent
+
+2. Completeness (0–3)
+   Does the answer address all aspects of the question?
+
+* 0: Fails to address the question
+* 1: Addresses the question partially
+* 2: Addresses most aspects with minor omissions
+* 3: Fully addresses all aspects
+
+3. Conciseness (0–1)
+   Is the answer free of unnecessary filler or irrelevant information?
+
+* 0: Contains significant irrelevant or redundant content
+* 1: Clean and focused response
+
+Output ONLY valid JSON following the provided schema.
+Do not include explanations outside the JSON.
+
+"""
+
+LLM_AS_JUDGE_USER_NO_REF = """You are evaluating answers independently.
+
+**Question:** {question}
+
+Evaluate each answer strictly using the rubric.
+
+**Answer 1:** {rag_answer}
+
+**Answer 2:** {llm_only_answer}
+
+**Answer 3:** {web_search_answer}
+
+```json
+{{
+  "answer_1": {{    
+    "factual_accuracy": <0-3>,
+    "completeness": <0-3>,
+    "conciseness": <0-1>,
+    "total": <sum>,
+    "reasoning": "<one to two sentence justification>"
+  }},
+  "answer_2": {{
+    "factual_accuracy": <0-3>,
+    "completeness": <0-3>,
+    "conciseness": <0-1>,
+    "total": <sum>,
+    "reasoning": "<one to two sentence justification>"
+  }},
+  "answer_3": {{
+    "factual_accuracy": <0-3>,
+    "completeness": <0-3>,
+    "conciseness": <0-1>,
+    "total": <sum>,
+    "reasoning": "<one to two sentence justification>"
+  }}
+}}
+```"""
+
+# ============================================================================
 # HELPER FUNCTIONS
 # ============================================================================
 

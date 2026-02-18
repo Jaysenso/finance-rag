@@ -47,6 +47,7 @@ class Source:
     filing_date: str
     page_number: Optional[int]
     chunk_id: str
+    content: str
     score: float
 
 

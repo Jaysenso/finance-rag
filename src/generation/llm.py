@@ -118,6 +118,28 @@ class OpenRouterLLM(BaseLLM):
         logger.debug(f"LLM generated {len(content)} chars")
         return content
 
+    def web_search(self, messages: List[Dict[str, str]], **kwargs) -> str:
+        """Perform web search via OpenRouter."""
+        response = self.client.chat.completions.create(
+            model=self.model,
+            messages=messages,
+            max_tokens=kwargs.get("max_tokens", self.max_tokens),
+            temperature=kwargs.get("temperature", self.temperature),
+            extra_body={
+            "plugins": [
+                {
+                    "id": "web",
+                    "max_results": 5,  
+                    "search_prompt": "Use these web results to answer the question:"
+                }
+            ]
+        }
+        )
+        content = response.choices[0].message.content
+        logger.debug(f"LLM generated {len(content)} chars")
+        return content
+
+
 
 def get_llm(provider: str = None, config_key: str = "llm", **kwargs) -> BaseLLM:
     """

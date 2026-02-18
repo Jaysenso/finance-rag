@@ -544,11 +544,11 @@ class RAGAgent:
                 filing_date=r.metadata.get("filing_date", ""),
                 page_number=r.metadata.get("page_number"),
                 chunk_id=r.chunk_id,
+                content=r.content,
                 score=r.score,
             )
             for i, r in enumerate(unique_results)
         ]
-
         if self.verbose:
             logger.info(f"Generated answer: {len(answer)} chars, {len(sources)} sources")
         return {"answer": answer, "sources": sources}
