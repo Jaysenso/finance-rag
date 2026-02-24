@@ -4,8 +4,7 @@ Hypothetical question generator for HyPE retrieval.
 Generates time-aware hypothetical questions from financial document chunks
 to improve question-to-question semantic matching.
 """
-from typing import List, Dict, Any, Optional
-from dataclasses import dataclass
+from typing import List, Optional
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from src.utils.logger import get_logger
 from src.generation.llm import BaseLLM, get_llm
@@ -13,8 +12,6 @@ from src.preprocessing.models import Chunk, GeneratedQuestions
 from src.utils.prompts import QUESTION_GENERATION_SYSTEM, QUESTION_GENERATION_USER
 
 logger = get_logger(__name__)
-
-
 
 class QuestionGenerator:
     """

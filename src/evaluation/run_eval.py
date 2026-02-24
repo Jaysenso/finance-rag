@@ -17,7 +17,6 @@ import pandas as pd
 from pathlib import Path
 
 try:
-    from ragas import SingleTurnSample, EvaluationDataset, evaluate
     from ragas.llms import llm_factory
     from ragas.embeddings import embedding_factory
     from ragas.metrics.collections import ContextPrecision, Faithfulness, ContextRecall
