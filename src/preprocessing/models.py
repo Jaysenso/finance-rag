@@ -1,9 +1,9 @@
 """
 Data models for preprocessing module.
 """
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, List
 from dataclasses import dataclass, field
-
+from pathlib import Path
 # ── Document Parser ────────────────────────────────────────
 
 @dataclass

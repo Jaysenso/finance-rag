@@ -19,7 +19,7 @@ load_dotenv()
 class VisionModel(ABC):
     """Abstract base class for vision models."""
     @abstractmethod
-    def describe_image(self, image: Image.image, prompt: str) -> str:
+    def describe_image(self, image: Image.Image, prompt: str) -> str:
         """
         Generate a description of an image.
         

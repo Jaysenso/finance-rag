@@ -27,7 +27,7 @@ import sys
 from pathlib import Path
 from typing import Optional, List
 from src.utils.logger import get_logger
-from src.generation import RAGAgent
+from src.generation.rag_agent import RAGAgent
 from config import load_config
 
 logger = get_logger(__name__)
