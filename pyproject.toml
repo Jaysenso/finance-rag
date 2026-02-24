@@ -1,0 +1,22 @@
+[project]
+name = "finance-rag"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "aiohttp>=3.13.3",
+    "docling>=2.74.0",
+    "langgraph>=1.0.9",
+    "openai>=2.23.0",
+    "openpyxl>=3.1.5",
+    "pandas>=2.3.3",
+    "pillow>=12.1.1",
+    "python-dotenv>=1.2.1",
+    "pyyaml>=6.0.3",
+    "qdrant-client>=1.17.0",
+    "ragas>=0.4.3",
+    "sec-api>=1.0.32",
+    "sentence-transformers>=5.2.3",
+    "torch>=2.10.0",
+]
