@@ -20,14 +20,17 @@ A specialized Retrieval-Augmented Generation (RAG) system for financial document
     cd finance-rag
     ```
 
-2.  **Set up the environment:**
+2.  **Install `uv` (if not already installed):**
     ```bash
-    python -m venv .venv
-    source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-    pip install -r requirements.txt  
+    curl -LsSf https://astral.sh/uv/install.sh | sh
     ```
 
-3.  **Configure `.env`:**
+3.  **Set up the environment:**
+    ```bash
+    uv sync
+    ```
+
+4.  **Configure `.env`:**
     Create a `.env` file with your API keys:
     ```bash
     OPENAI_API_KEY=your_key_here
@@ -35,7 +38,7 @@ A specialized Retrieval-Augmented Generation (RAG) system for financial document
     SEC_API_KEY=your_sec_api_key_here  # For data collection
     ```
 
-4.  **Update `config.yaml`:**
+5.  **Update `config.yaml`:**
     Adjust model settings, vector store paths, and retrieval parameters in `config.yaml` as needed.
 
 ---
