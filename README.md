@@ -15,6 +15,7 @@ A specialized Retrieval-Augmented Generation (RAG) system for financial document
 ## 🛠️ Installation
 
 1.  **Clone the repository:**
+
     ```bash
     git clone https://github.com/your-username/finance-rag.git
     cd finance-rag
@@ -22,22 +23,32 @@ A specialized Retrieval-Augmented Generation (RAG) system for financial document
 
 2.  **Install `uv` (if not already installed):**
     (MacOS)
+
     ```bash
     curl -LsSf https://astral.sh/uv/install.sh | sh
     ```
+
     (Windows)
+
     ```bash
     powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
     ```
-    
 
-4.  **Set up the environment:**
+3.  **Install backend dependencies:**
+
     ```bash
     uv sync
     ```
 
+4.  **Install frontend dependencies:**
+
+    ```bash
+    cd frontend && npm install && cd ..
+    ```
+
 5.  **Configure `.env`:**
     Create a `.env` file with your API keys:
+
     ```bash
     OPENAI_API_KEY=your_key_here
     QDRANT_API_KEY=your_key_here
@@ -85,8 +96,9 @@ data/pdf/
 ```
 
 > **Note:** The `ingest.py` script (described below) scans a single directory. To ingest these files, you can either:
-> * Point the ingestion script to specific sub-folders (e.g., `python ingest.py --directory data/pdf/AAPL/10-K/`)
-> * Move/Copy the PDF files you want to process into a single flat directory (e.g., `data/filings/`).
+>
+> - Point the ingestion script to specific sub-folders (e.g., `python ingest.py --directory data/pdf/AAPL/10-K/`)
+> - Move/Copy the PDF files you want to process into a single flat directory (e.g., `data/filings/`).
 
 ---
 
@@ -106,14 +118,15 @@ Files **MUST** follow this naming convention for automatic metadata extraction:
 COMPANY_DOCTYPE_ACCESSION.pdf
 ```
 
-*   **COMPANY**: Ticker symbol (Uppercase, e.g., `AAPL`, `MSFT`)
-*   **DOCTYPE**: Document type (e.g., `10-K`, `10-Q`)
-*   **ACCESSION**: SEC Accession Number (Format: `XXXXXXXXXX-YY-ZZZZZZ`). The year `YY` is used as the filing date year.
+- **COMPANY**: Ticker symbol (Uppercase, e.g., `AAPL`, `MSFT`)
+- **DOCTYPE**: Document type (e.g., `10-K`, `10-Q`)
+- **ACCESSION**: SEC Accession Number (Format: `XXXXXXXXXX-YY-ZZZZZZ`). The year `YY` is used as the filing date year.
 
 #### **Examples:**
-*   ✅ `AAPL_10-K_0000320193-25-000079.pdf` (Year 2025)
-*   ✅ `MSFT_10-Q_0001564590-24-000123.pdf` (Year 2024)
-*   ❌ `apple_report.pdf` (Invalid)
+
+- ✅ `AAPL_10-K_0000320193-25-000079.pdf` (Year 2025)
+- ✅ `MSFT_10-Q_0001564590-24-000123.pdf` (Year 2024)
+- ❌ `apple_report.pdf` (Invalid)
 
 #### **Run Batch Ingestion:**
 
@@ -122,6 +135,7 @@ python ingest.py --directory data/filings/
 ```
 
 The system will:
+
 1.  Scan the directory.
 2.  Extract metadata from filenames.
 3.  Parse, chunk, and index all valid files.
@@ -133,12 +147,14 @@ The system will:
 Use this for single files or when you want to explicitly specify metadata.
 
 **Single File:**
+
 ```bash
 python ingest.py --file data/my_doc.pdf --company AAPL --doc-type 10-K --date 2023-12-31
 ```
 
 **Batch with Same Metadata (Not Recommended):**
 Forces the same metadata for ALL files in the directory.
+
 ```bash
 python ingest.py --directory data/filings/ --company AAPL --doc-type 10-K --date 2023-12-31
 ```
@@ -150,27 +166,36 @@ python ingest.py --directory data/filings/ --company AAPL --doc-type 10-K --date
 Once documents are ingested, you can query them using `query.py`.
 
 ### Interactive Mode
+
 Start a chat session with your financial data:
+
 ```bash
 python query.py
 ```
-*   Type your question (e.g., *"What was Apple's revenue in 2023?"*)
-*   Type `quit` to exit.
+
+- Type your question (e.g., _"What was Apple's revenue in 2023?"_)
+- Type `quit` to exit.
 
 ### Single Query
+
 Run a quick one-off question:
+
 ```bash
 python query.py --query "What are the key risk factors for Microsoft?"
 ```
 
 ### Filtered Query
+
 Narrow down sources by company, document type, or date:
+
 ```bash
 python query.py --query "Revenue growth?" --company AAPL --doc-type 10-K
 ```
 
 ### Batch Query Mode
+
 Process a list of questions from a text file (one question per line):
+
 ```bash
 python query.py --batch sample_queries.txt > results.txt
 ```
@@ -179,16 +204,16 @@ python query.py --batch sample_queries.txt > results.txt
 
 ## ⚙️ Advanced Options
 
-*   **Skip HyPE**: To speed up ingestion (skips generating hypothetical questions), add `--skip-hype`:
-    ```bash
-    python ingest.py --directory data/filings/ --skip-hype
-    ```
+- **Skip HyPE**: To speed up ingestion (skips generating hypothetical questions), add `--skip-hype`:
+  ```bash
+  python ingest.py --directory data/filings/ --skip-hype
+  ```
 
 ---
 
 ## 📂 Project Structure
 
-*   `ingest.py`: Main script for document ingestion.
-*   `query.py`: Main script for querying.
-*   `config.yaml`: Configuration for models, vector stores, and chunking.
-*   `src/`: Source code for parsing, chunking, embedding, and generation.
+- `ingest.py`: Main script for document ingestion.
+- `query.py`: Main script for querying.
+- `config.yaml`: Configuration for models, vector stores, and chunking.
+- `src/`: Source code for parsing, chunking, embedding, and generation.
