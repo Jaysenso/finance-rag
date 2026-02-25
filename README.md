@@ -21,16 +21,22 @@ A specialized Retrieval-Augmented Generation (RAG) system for financial document
     ```
 
 2.  **Install `uv` (if not already installed):**
+    (MacOS)
     ```bash
     curl -LsSf https://astral.sh/uv/install.sh | sh
     ```
+    (Windows)
+    ```bash
+    powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+    ```
+    
 
-3.  **Set up the environment:**
+4.  **Set up the environment:**
     ```bash
     uv sync
     ```
 
-4.  **Configure `.env`:**
+5.  **Configure `.env`:**
     Create a `.env` file with your API keys:
     ```bash
     OPENAI_API_KEY=your_key_here
@@ -38,7 +44,7 @@ A specialized Retrieval-Augmented Generation (RAG) system for financial document
     SEC_API_KEY=your_sec_api_key_here  # For data collection
     ```
 
-5.  **Update `config.yaml`:**
+6.  **Update `config.yaml`:**
     Adjust model settings, vector store paths, and retrieval parameters in `config.yaml` as needed.
 
 ---
