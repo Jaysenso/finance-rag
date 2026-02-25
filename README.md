@@ -60,6 +60,39 @@ A specialized Retrieval-Augmented Generation (RAG) system for financial document
 
 ---
 
+## ▶️ Running the Development Server
+
+The easiest way to start both the backend and frontend together is with the provided `dev.sh` script.
+
+1. **Make the script executable** (first time only):
+
+    ```bash
+    chmod +x dev.sh
+    ```
+
+2. **Start both servers:**
+
+    ```bash
+    ./dev.sh
+    ```
+
+    This will launch:
+    - **Backend** → `http://localhost:8000`
+    - **Frontend** → `http://localhost:5173`
+
+    Press `Ctrl+C` to stop both servers.
+
+> **Alternatively**, you can start each server manually in separate terminals:
+> ```bash
+> # Terminal 1 — Backend
+> uv run uvicorn api.main:app --reload
+>
+> # Terminal 2 — Frontend
+> cd frontend && npm run dev
+> ```
+
+---
+
 ## 📊 Data Collection
 
 The system includes a built-in scraper to fetch financial documents (10-K, 10-Q, 8-K) directly from the SEC EDGAR database using the [SEC API](https://sec-api.io/).
