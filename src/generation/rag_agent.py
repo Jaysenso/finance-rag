@@ -4,7 +4,13 @@ Agentic RAG orchestrator using LangGraph.
 Pipeline: Analyze → Retrieve → Rerank → Verify → (Retry?) → Generate
 Each step is a graph node. Self-correction is a conditional edge
 """
+import threading
 from typing import List, Optional, TypedDict
+
+# Thread-local storage for per-request streaming callbacks.
+# Using thread-local (not instance vars) ensures concurrent requests
+# running in separate executor threads don't clobber each other.
+_tlocal = threading.local()
 
 from langgraph.graph import StateGraph, START, END
 
@@ -117,6 +123,14 @@ class RAGAgent:
                 f"hype={self.use_hype})"
             )
 
+    # ── Streaming helpers ────────────────────────────────────
+
+    def _emit_status(self, message: str) -> None:
+        """Send a pipeline status update via the per-request status callback."""
+        cb = getattr(_tlocal, "status_callback", None)
+        if cb:
+            cb(message)
+
     # ── Graph Construction ───────────────────────────────────
 
     def _build_graph(self):
@@ -154,16 +168,20 @@ class RAGAgent:
 
     # Pipeline logging methods moved to src/utils/pipeline_logger.py
 
-    def query(self, user_query: str) -> RAGResponse:
+    def query(self, user_query: str, token_callback=None, status_callback=None) -> RAGResponse:
         """
         Process a user query through the LangGraph RAG pipeline.
 
         Args:
             user_query: Question about SEC filings / Financial Reports
+            token_callback: Optional callable(str) invoked for each generated token.
+            status_callback: Optional callable(str) invoked at each pipeline stage.
 
         Returns:
             RAGResponse with answer, sources, and metadata
         """
+        _tlocal.token_callback = token_callback
+        _tlocal.status_callback = status_callback
         logger.info(f"Processing query: {user_query}")
 
         # Setup pipeline logger (ALWAYS active)
@@ -201,14 +219,15 @@ class RAGAgent:
                 partial_state = chunk[node_name]
                 # Accumulate state updates
                 full_state.update(partial_state)
-                
+
                 # ALWAYS log state to file
                 log_state(node_name, full_state, log_file)
-                
-                    
+
         finally:
             log_pipeline_footer(log_file)
             log_file.close()
+            _tlocal.token_callback = None
+            _tlocal.status_callback = None
 
         return RAGResponse(
             answer=full_state["answer"],
@@ -223,6 +242,7 @@ class RAGAgent:
 
     def _node_analyze(self, state: RAGState) -> dict:
         """Decompose user query into sub-queries with filters."""
+        self._emit_status("Analyzing your query…")
         user_query = state["user_query"]
 
         available_companies = self.vector_store.get_available_companies()
@@ -310,6 +330,7 @@ class RAGAgent:
 
     def _node_retrieve(self, state: RAGState) -> dict:
         """Retrieve using hybrid or standard search."""
+        self._emit_status("Searching SEC filings…")
         current_sq = state["sub_queries"][state["current_sq_idx"]]
         
         # Use HyPE hybrid retrieval if enabled
@@ -344,6 +365,7 @@ class RAGAgent:
 
     def _node_rerank(self, state: RAGState) -> dict:
         """Rerank retrieved chunks using cross-encoder."""
+        self._emit_status("Reranking results…")
         sq = state["sub_queries"][state["current_sq_idx"]]
         reranked = self.reranker.rerank(sq.query, state["current_results"])
         return {"current_results": reranked}
@@ -352,6 +374,7 @@ class RAGAgent:
 
     def _node_verify(self, state: RAGState) -> dict:
         """LLM verifies context relevance to the query."""
+        self._emit_status("Verifying relevance…")
         sq = state["sub_queries"][state["current_sq_idx"]]
         results = state["current_results"]
 
@@ -407,6 +430,7 @@ class RAGAgent:
 
     def _node_reformulate(self, state: RAGState) -> dict:
         """Reformulate query based on verification feedback to improve retrieval."""
+        self._emit_status("Refining search…")
         sq = state["sub_queries"][state["current_sq_idx"]]
         
         messages = [
@@ -525,7 +549,8 @@ class RAGAgent:
                 seen[r.chunk_id] = r
         unique_results = sorted(seen.values(), key=lambda r: r.score, reverse=True)
 
-        # Generate answer
+        # Generate answer — stream tokens if a callback was registered.
+        self._emit_status("Generating answer…")
         sources_text = format_sources_for_prompt(unique_results)
         messages = [
             {"role": "system", "content": GENERATION_SYSTEM},
@@ -533,7 +558,11 @@ class RAGAgent:
                 query=user_query, sources=sources_text,
             )},
         ]
-        answer = self.generation_llm.generate(messages)
+        token_cb = getattr(_tlocal, "token_callback", None)
+        if token_cb:
+            answer = self.generation_llm.generate_stream(messages, token_callback=token_cb)
+        else:
+            answer = self.generation_llm.generate(messages)
 
         # Build sources list
         sources = [

@@ -35,6 +35,27 @@ class BaseLLM(ABC):
         """
         pass
 
+    def generate_stream(self, messages: List[Dict[str, str]], token_callback=None, **kwargs) -> str:
+        """
+        Stream a completion, calling token_callback for each token chunk.
+
+        Default implementation falls back to generate() and chunks the output.
+        Override in subclasses for true streaming.
+
+        Args:
+            messages: Chat messages
+            token_callback: Callable[[str], None] invoked for each token
+            **kwargs: Optional overrides forwarded to generate()
+
+        Returns:
+            Full generated text
+        """
+        text = self.generate(messages, **kwargs)
+        if token_callback:
+            for char in text:
+                token_callback(char)
+        return text
+
     def generate_json(self, messages: List[Dict[str, str]], **kwargs) -> Optional[dict]:
         """
         Generate and parse JSON output from LLM.
@@ -117,6 +138,29 @@ class OpenRouterLLM(BaseLLM):
         content = response.choices[0].message.content
         logger.debug(f"LLM generated {len(content)} chars")
         return content
+
+    def generate_stream(self, messages: List[Dict[str, str]], token_callback=None, **kwargs) -> str:
+        """Generate completion via OpenRouter with streaming enabled.
+
+        Calls token_callback(chunk) for every token chunk received.
+        Returns the full concatenated text.
+        """
+        stream = self.client.chat.completions.create(
+            model=self.model,
+            messages=messages,
+            max_tokens=kwargs.get("max_tokens", self.max_tokens),
+            temperature=kwargs.get("temperature", self.temperature),
+            stream=True,
+        )
+        full_content = ""
+        for chunk in stream:
+            delta = chunk.choices[0].delta.content if chunk.choices else None
+            if delta:
+                full_content += delta
+                if token_callback:
+                    token_callback(delta)
+        logger.debug(f"LLM streamed {len(full_content)} chars")
+        return full_content
 
     def web_search(self, messages: List[Dict[str, str]], **kwargs) -> str:
         """Perform web search via OpenRouter."""
