@@ -6,6 +6,16 @@ __pycache__/
 # C extensions
 *.so
 
+# Node
+
+.DS_Store
+.env
+node_modules/
+
+# React Router
+.react-router/
+build/
+
 # Distribution / packaging
 .Python
 build/
