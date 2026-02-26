@@ -1,4 +1,5 @@
 # Finance RAG System
+<img width="949" height="949" alt="Screenshot_2" src="https://github.com/user-attachments/assets/0750ca8e-e71d-4e6f-9a0c-54a00c17e0af" />
 
 A specialized Retrieval-Augmented Generation (RAG) system for financial documents (10-K, 10-Q, 8-K), designed to handle complex tables, charts, and unstructured text with high precision.
 
